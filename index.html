@@ -1209,7 +1209,6 @@ function animateAvatar() {
 
   avatarCtx.clearRect(0, 0, avatarCanvas.width, avatarCanvas.height);
   drawBaseCharacter();
-  drawHat(currentCategory);
 
   for (var i = hatParticles.length - 1; i >= 0; i--) {
     if (!hatParticles[i].update()) {
