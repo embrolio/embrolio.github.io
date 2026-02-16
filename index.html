@@ -9,19 +9,19 @@
 <title>brolio.dev</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@200;300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@200;300;400;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-–bg: #0a0a0f;
-–surface: #12121a;
-–text-primary: #e8e6e3;
-–text-dim: #6b6979;
-–accent: #64ffda;
-–accent-secondary: #7c5cfc;
-–accent-warm: #ff6b6b;
-–glow: rgba(100, 255, 218, 0.08);
+--bg: #0a0a0f;
+--surface: #12121a;
+--text-primary: #e8e6e3;
+--text-dim: #6b6979;
+--accent: #64ffda;
+--accent-secondary: #7c5cfc;
+--accent-warm: #ff6b6b;
+--glow: rgba(100, 255, 218, 0.08);
 }
 
 html {
@@ -31,11 +31,11 @@ background: #0a0a0f;
 html, body {
 min-height: 100%;
 height: 100%;
-overflow: hidden;
+overflow-y: auto;
 background: #0a0a0f;
-background: var(–bg);
-color: var(–text-primary);
-font-family: ‘Outfit’, sans-serif;
+background: var(--bg);
+color: var(--text-primary);
+font-family: 'Outfit', sans-serif;
 -webkit-font-smoothing: antialiased;
 cursor: none;
 }
@@ -51,7 +51,7 @@ pointer-events: none;
 position: fixed;
 width: 18px;
 height: 18px;
-border: 1.5px solid var(–accent);
+border: 1.5px solid var(--accent);
 border-radius: 50%;
 pointer-events: none;
 z-index: 9999;
@@ -63,14 +63,14 @@ mix-blend-mode: difference;
 .custom-cursor.clicking {
 width: 12px;
 height: 12px;
-background: var(–accent);
+background: var(--accent);
 }
 
 .cursor-dot {
 position: fixed;
 width: 4px;
 height: 4px;
-background: var(–accent);
+background: var(--accent);
 border-radius: 50%;
 pointer-events: none;
 z-index: 9999;
@@ -84,31 +84,101 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-height: 100%;
-padding: 2rem;
+min-height: 100%;
+padding: 2rem 2rem 3rem;
 pointer-events: none;
 }
 
+/* ──── Avatar Canvas ──── */
+#avatar-canvas {
+image-rendering: pixelated;
+image-rendering: crisp-edges;
+width: 128px;
+height: 160px;
+animation: avatarBounce 3s ease-in-out infinite, fadeUp 0.8s ease forwards 0s;
+opacity: 0;
+}
+
+@keyframes avatarBounce {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-3px); }
+}
+
+/* ──── Category Label ──── */
+.category-label {
+font-family: 'JetBrains Mono', monospace;
+font-size: 0.75rem;
+color: var(--accent);
+letter-spacing: 0.05em;
+margin-top: 0.25rem;
+margin-bottom: 0.75rem;
+height: 1.2em;
+opacity: 0;
+animation: fadeUp 0.8s ease forwards 0.05s;
+user-select: none;
+}
+
 .title {
-font-family: ‘JetBrains Mono’, monospace;
+font-family: 'JetBrains Mono', monospace;
 font-size: clamp(2.4rem, 7vw, 5rem);
 font-weight: 300;
 letter-spacing: -0.02em;
-color: var(–text-primary);
+color: var(--text-primary);
 position: relative;
 user-select: none;
 }
 
 .title .dot {
-color: var(–accent);
+color: var(--accent);
 text-shadow: 0 0 30px rgba(100, 255, 218, 0.4);
 }
 
+/* ──── Title Glitch ──── */
+.title:hover::before,
+.title:hover::after {
+content: 'brolio.dev';
+position: absolute;
+left: 0;
+top: 0;
+width: 100%;
+overflow: hidden;
+}
+
+.title:hover::before {
+animation: glitch-1 0.3s infinite;
+color: var(--accent);
+clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+}
+
+.title:hover::after {
+animation: glitch-2 0.3s infinite reverse;
+color: var(--accent-secondary);
+clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch-1 {
+0% { transform: translate(0); }
+20% { transform: translate(-2px, 1px); }
+40% { transform: translate(1px, -1px); }
+60% { transform: translate(-1px, 0); }
+80% { transform: translate(2px, 1px); }
+100% { transform: translate(0); }
+}
+
+@keyframes glitch-2 {
+0% { transform: translate(0); }
+20% { transform: translate(1px, -1px); }
+40% { transform: translate(-1px, 1px); }
+60% { transform: translate(2px, 0); }
+80% { transform: translate(-2px, -1px); }
+100% { transform: translate(0); }
+}
+
 .subtitle {
-font-family: ‘Outfit’, sans-serif;
+font-family: 'Outfit', sans-serif;
 font-size: 0.85rem;
 font-weight: 300;
-color: var(–text-dim);
+color: var(--text-dim);
 letter-spacing: 0.3em;
 text-transform: uppercase;
 margin-top: 0.75rem;
@@ -119,8 +189,8 @@ animation: fadeUp 0.8s ease forwards 0.3s;
 .divider {
 width: 40px;
 height: 1px;
-background: linear-gradient(90deg, transparent, var(–accent), transparent);
-margin: 2rem 0;
+background: linear-gradient(90deg, transparent, var(--accent), transparent);
+margin: 1.25rem 0;
 opacity: 0;
 animation: fadeUp 0.8s ease forwards 0.5s;
 }
@@ -137,13 +207,13 @@ pointer-events: auto;
 }
 
 .tech-tag {
-font-family: ‘JetBrains Mono’, monospace;
+font-family: 'JetBrains Mono', monospace;
 font-size: 0.7rem;
 font-weight: 400;
 padding: 0.4rem 0.85rem;
 border: 1px solid rgba(100, 255, 218, 0.1);
 border-radius: 100px;
-color: var(–text-dim);
+color: var(--text-dim);
 background: rgba(100, 255, 218, 0.03);
 transition: all 0.3s ease;
 cursor: none;
@@ -152,11 +222,105 @@ letter-spacing: 0.05em;
 }
 
 .tech-tag:hover {
-color: var(–accent);
+color: var(--accent);
 border-color: rgba(100, 255, 218, 0.3);
 background: rgba(100, 255, 218, 0.06);
 box-shadow: 0 0 20px rgba(100, 255, 218, 0.08);
 transform: translateY(-1px);
+}
+
+.tech-tag.active {
+color: var(--accent);
+border-color: rgba(100, 255, 218, 0.4);
+background: rgba(100, 255, 218, 0.08);
+box-shadow: 0 0 15px rgba(100, 255, 218, 0.15);
+animation: tagPulse 2s ease-in-out infinite;
+}
+
+@keyframes tagPulse {
+0%, 100% { box-shadow: 0 0 15px rgba(100, 255, 218, 0.15); }
+50% { box-shadow: 0 0 25px rgba(100, 255, 218, 0.25); }
+}
+
+/* ──── Code Window ──── */
+.code-window {
+margin-top: 1.5rem;
+width: 440px;
+max-width: 95vw;
+border: 1px solid rgba(100, 255, 218, 0.08);
+border-radius: 8px;
+background: var(--surface);
+overflow: hidden;
+opacity: 0;
+animation: fadeUp 0.8s ease forwards 0.85s;
+pointer-events: auto;
+}
+
+.code-title-bar {
+display: flex;
+align-items: center;
+gap: 6px;
+padding: 0.55rem 0.85rem;
+background: rgba(255, 255, 255, 0.03);
+border-bottom: 1px solid rgba(100, 255, 218, 0.06);
+}
+
+.code-dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+}
+
+.code-dot.red { background: #ff5f57; }
+.code-dot.yellow { background: #febc2e; }
+.code-dot.green { background: #28c840; }
+
+.code-filename {
+font-family: 'JetBrains Mono', monospace;
+font-size: 0.65rem;
+color: var(--text-dim);
+margin-left: 0.5rem;
+letter-spacing: 0.04em;
+}
+
+.code-body {
+padding: 1rem 1.1rem;
+height: 175px;
+overflow: hidden;
+}
+
+.code-body pre {
+font-family: 'Fira Code', 'JetBrains Mono', monospace;
+font-size: 0.72rem;
+line-height: 1.65;
+margin: 0;
+white-space: pre;
+overflow-x: auto;
+}
+
+.code-body .kw { color: #7c5cfc; }
+.code-body .str { color: #ff6b6b; }
+.code-body .fn { color: #64ffda; }
+.code-body .cm { color: #6b6979; }
+.code-body .num { color: #f5a623; }
+.code-body .prop { color: #79c0ff; }
+.code-body .type { color: #e8e6e3; }
+.code-body .punc { color: #6b6979; }
+
+.code-body .cursor-blink {
+display: inline-block;
+width: 0.55em;
+height: 1.1em;
+background: var(--accent);
+vertical-align: text-bottom;
+animation: cursorBlinkAnim 1s step-end infinite;
+margin-left: 1px;
+opacity: 0.7;
+}
+
+@keyframes cursorBlinkAnim {
+0%, 100% { opacity: 0.7; }
+50% { opacity: 0; }
 }
 
 .status {
@@ -166,10 +330,10 @@ gap: 0.6rem;
 margin-top: 2rem;
 opacity: 0;
 animation: fadeUp 0.8s ease forwards 0.9s;
-font-family: ‘JetBrains Mono’, monospace;
+font-family: 'JetBrains Mono', monospace;
 font-size: 0.7rem;
 letter-spacing: 0.08em;
-color: var(–text-dim);
+color: var(--text-dim);
 user-select: none;
 }
 
@@ -181,7 +345,7 @@ flex-shrink: 0;
 }
 
 .status.open .status-dot {
-background: var(–accent);
+background: var(--accent);
 box-shadow: 0 0 8px rgba(100, 255, 218, 0.5), 0 0 20px rgba(100, 255, 218, 0.2);
 animation: pulse-dot 2s ease-in-out infinite;
 }
@@ -192,11 +356,11 @@ box-shadow: 0 0 8px rgba(255, 77, 77, 0.3);
 }
 
 .status.closed .status-label {
-color: var(–text-dim);
+color: var(--text-dim);
 }
 
 .status.open .status-label {
-color: var(–accent);
+color: var(--accent);
 }
 
 @keyframes pulse-dot {
@@ -210,7 +374,7 @@ inset: 0;
 z-index: 0;
 opacity: 0.03;
 pointer-events: none;
-background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’/%3E%3C/svg%3E”);
+background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 background-repeat: repeat;
 background-size: 256px 256px;
 }
@@ -231,6 +395,7 @@ to { opacity: 1; transform: translateY(0); }
 .title-wrap {
 opacity: 0;
 animation: fadeUp 0.8s ease forwards 0.1s;
+pointer-events: auto;
 }
 
 /* Mobile: hide custom cursor, show default */
@@ -238,6 +403,19 @@ animation: fadeUp 0.8s ease forwards 0.1s;
 html, body { cursor: auto; }
 .custom-cursor, .cursor-dot { display: none; }
 .tech-tag, .links a { cursor: pointer; }
+}
+
+@media (max-width: 600px) {
+#avatar-canvas {
+  width: 80px;
+  height: 100px;
+}
+.code-body pre {
+  font-size: 0.65rem;
+}
+.category-label {
+  font-size: 0.65rem;
+}
 }
 
 @media (max-width: 480px) {
@@ -257,37 +435,50 @@ html, body { cursor: auto; }
 <div class="cursor-dot" id="cursorDot"></div>
 
 <div class="content">
+  <canvas id="avatar-canvas" width="128" height="160"></canvas>
+  <div class="category-label" id="categoryLabel"></div>
   <div class="title-wrap">
     <h1 class="title">brolio<span class="dot">.</span>dev</h1>
   </div>
-  <p class="subtitle">full-stack · devops · cloud</p>
+  <p class="subtitle">full-stack &middot; devops &middot; cloud</p>
   <div class="divider"></div>
   <div class="tech-grid">
-    <span class="tech-tag">Node.js</span>
-    <span class="tech-tag">TypeScript</span>
-    <span class="tech-tag">JavaScript</span>
-    <span class="tech-tag">PHP</span>
-    <span class="tech-tag">React</span>
-    <span class="tech-tag">React Native</span>
-    <span class="tech-tag">Next.js</span>
-    <span class="tech-tag">HTML/CSS</span>
-    <span class="tech-tag">Express</span>
-    <span class="tech-tag">REST APIs</span>
-    <span class="tech-tag">MSSQL</span>
-    <span class="tech-tag">PostgreSQL</span>
-    <span class="tech-tag">SQLite</span>
-    <span class="tech-tag">Redis</span>
-    <span class="tech-tag">AWS</span>
-    <span class="tech-tag">Azure</span>
-    <span class="tech-tag">Docker</span>
-    <span class="tech-tag">Nginx</span>
-    <span class="tech-tag">CircleCI</span>
-    <span class="tech-tag">GitHub Actions</span>
-    <span class="tech-tag">Git</span>
-    <span class="tech-tag">Linux</span>
-    <span class="tech-tag">AI Agents</span>
-    <span class="tech-tag">MCP</span>
-    <span class="tech-tag">Claude Code</span>
+    <span class="tech-tag" data-category="languages">Node.js</span>
+    <span class="tech-tag" data-category="languages">TypeScript</span>
+    <span class="tech-tag" data-category="languages">JavaScript</span>
+    <span class="tech-tag" data-category="languages">PHP</span>
+    <span class="tech-tag" data-category="frontend">React</span>
+    <span class="tech-tag" data-category="frontend">React Native</span>
+    <span class="tech-tag" data-category="frontend">Next.js</span>
+    <span class="tech-tag" data-category="frontend">HTML/CSS</span>
+    <span class="tech-tag" data-category="api">Express</span>
+    <span class="tech-tag" data-category="api">REST APIs</span>
+    <span class="tech-tag" data-category="database">MSSQL</span>
+    <span class="tech-tag" data-category="database">PostgreSQL</span>
+    <span class="tech-tag" data-category="database">SQLite</span>
+    <span class="tech-tag" data-category="database">Redis</span>
+    <span class="tech-tag" data-category="cloud">AWS</span>
+    <span class="tech-tag" data-category="cloud">Azure</span>
+    <span class="tech-tag" data-category="devops">Docker</span>
+    <span class="tech-tag" data-category="devops">Nginx</span>
+    <span class="tech-tag" data-category="devops">CircleCI</span>
+    <span class="tech-tag" data-category="devops">GitHub Actions</span>
+    <span class="tech-tag" data-category="devops">Git</span>
+    <span class="tech-tag" data-category="devops">Linux</span>
+    <span class="tech-tag" data-category="ai">AI Agents</span>
+    <span class="tech-tag" data-category="ai">MCP</span>
+    <span class="tech-tag" data-category="ai">Claude Code</span>
+  </div>
+  <div class="code-window">
+    <div class="code-title-bar">
+      <span class="code-dot red"></span>
+      <span class="code-dot yellow"></span>
+      <span class="code-dot green"></span>
+      <span class="code-filename" id="codeFilename">brolio.ts</span>
+    </div>
+    <div class="code-body">
+      <pre><code id="codeContent"></code></pre>
+    </div>
   </div>
   <div class="status closed">
     <span class="status-dot"></span>
@@ -297,9 +488,9 @@ html, body { cursor: auto; }
 
 <script>
 // ──── Canvas Setup ────
-const canvas = document.getElementById('trails');
-const ctx = canvas.getContext('2d');
-let W, H;
+var canvas = document.getElementById('trails');
+var ctx = canvas.getContext('2d');
+var W, H;
 
 function resize() {
   W = canvas.width = window.innerWidth;
@@ -309,136 +500,126 @@ resize();
 window.addEventListener('resize', resize);
 
 // ──── State ────
-let mouseX = W / 2, mouseY = H / 2;
-let isTouch = false;
-const particles = [];
-const burstParticles = [];
-const trailPoints = [];
-const MAX_TRAIL = 50;
+var mouseX = W / 2, mouseY = H / 2;
+var isTouch = false;
+var particles = [];
+var burstParticles = [];
+var trailPoints = [];
+var MAX_TRAIL = 50;
 
 // ──── Custom Cursor ────
-const cursor = document.getElementById('cursor');
-const cursorDot = document.getElementById('cursorDot');
-let cursorX = W / 2, cursorY = H / 2;
+var cursor = document.getElementById('cursor');
+var cursorDot = document.getElementById('cursorDot');
+var cursorX = W / 2, cursorY = H / 2;
 
 // ──── Trail Point Class ────
-class TrailPoint {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.life = 1;
-    this.decay = 0.02 + Math.random() * 0.01;
-  }
-  update() {
-    this.life -= this.decay;
-    return this.life > 0;
-  }
+function TrailPoint(x, y) {
+  this.x = x;
+  this.y = y;
+  this.life = 1;
+  this.decay = 0.02 + Math.random() * 0.01;
 }
+TrailPoint.prototype.update = function() {
+  this.life -= this.decay;
+  return this.life > 0;
+};
 
 // ──── Particle (for mouse trail sparkle) ────
-class Particle {
-  constructor(x, y, opts = {}) {
-    this.x = x;
-    this.y = y;
-    this.vx = opts.vx || (Math.random() - 0.5) * 1.5;
-    this.vy = opts.vy || (Math.random() - 0.5) * 1.5;
-    this.life = 1;
-    this.decay = opts.decay || (0.015 + Math.random() * 0.02);
-    this.size = opts.size || (1 + Math.random() * 2);
-    this.color = opts.color || `rgba(100, 255, 218, `;
-    this.gravity = opts.gravity || 0;
-  }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.vy += this.gravity;
-    this.vx *= 0.99;
-    this.vy *= 0.99;
-    this.life -= this.decay;
-    return this.life > 0;
-  }
-  draw(ctx) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
-    ctx.fillStyle = this.color + (this.life * 0.6) + ')';
-    ctx.fill();
-  }
+function Particle(x, y, opts) {
+  opts = opts || {};
+  this.x = x;
+  this.y = y;
+  this.vx = opts.vx !== undefined ? opts.vx : (Math.random() - 0.5) * 1.5;
+  this.vy = opts.vy !== undefined ? opts.vy : (Math.random() - 0.5) * 1.5;
+  this.life = 1;
+  this.decay = opts.decay || (0.015 + Math.random() * 0.02);
+  this.size = opts.size || (1 + Math.random() * 2);
+  this.color = opts.color || 'rgba(100, 255, 218, ';
+  this.gravity = opts.gravity || 0;
 }
+Particle.prototype.update = function() {
+  this.x += this.vx;
+  this.y += this.vy;
+  this.vy += this.gravity;
+  this.vx *= 0.99;
+  this.vy *= 0.99;
+  this.life -= this.decay;
+  return this.life > 0;
+};
+Particle.prototype.draw = function(ctx) {
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
+  ctx.fillStyle = this.color + (this.life * 0.6) + ')';
+  ctx.fill();
+};
 
 // ──── Burst Particle (on click) ────
-class BurstParticle {
-  constructor(x, y) {
-    const angle = Math.random() * Math.PI * 2;
-    const speed = 1 + Math.random() * 3;
-    this.x = x;
-    this.y = y;
-    this.vx = Math.cos(angle) * speed;
-    this.vy = Math.sin(angle) * speed;
-    this.life = 1;
-    this.decay = 0.02 + Math.random() * 0.03;
-    this.size = 0.5 + Math.random() * 2;
-    this.color = 'rgba(100, 255, 218, ';
-    this.gravity = 0.02;
-    this.trail = [];
-  }
-  update() {
-    this.trail.push({ x: this.x, y: this.y, life: this.life });
-    if (this.trail.length > 6) this.trail.shift();
-    this.x += this.vx;
-    this.y += this.vy;
-    this.vy += this.gravity;
-    this.vx *= 0.98;
-    this.vy *= 0.98;
-    this.life -= this.decay;
-    return this.life > 0;
-  }
-  draw(ctx) {
-    // Particle trail
-    for (let i = 0; i < this.trail.length; i++) {
-      const t = this.trail[i];
-      const alpha = (i / this.trail.length) * this.life * 0.3;
-      ctx.beginPath();
-      ctx.arc(t.x, t.y, this.size * 0.5 * (i / this.trail.length), 0, Math.PI * 2);
-      ctx.fillStyle = this.color + alpha + ')';
-      ctx.fill();
-    }
-    // Main particle
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
-    ctx.fillStyle = this.color + (this.life * 0.8) + ')';
-    ctx.fill();
-    // Glow
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size * this.life * 2.5, 0, Math.PI * 2);
-    ctx.fillStyle = this.color + (this.life * 0.1) + ')';
-    ctx.fill();
-  }
+function BurstParticle(x, y) {
+  var angle = Math.random() * Math.PI * 2;
+  var speed = 1 + Math.random() * 3;
+  this.x = x;
+  this.y = y;
+  this.vx = Math.cos(angle) * speed;
+  this.vy = Math.sin(angle) * speed;
+  this.life = 1;
+  this.decay = 0.02 + Math.random() * 0.03;
+  this.size = 0.5 + Math.random() * 2;
+  this.color = 'rgba(100, 255, 218, ';
+  this.gravity = 0.02;
+  this.trail = [];
 }
+BurstParticle.prototype.update = function() {
+  this.trail.push({ x: this.x, y: this.y, life: this.life });
+  if (this.trail.length > 6) this.trail.shift();
+  this.x += this.vx;
+  this.y += this.vy;
+  this.vy += this.gravity;
+  this.vx *= 0.98;
+  this.vy *= 0.98;
+  this.life -= this.decay;
+  return this.life > 0;
+};
+BurstParticle.prototype.draw = function(ctx) {
+  for (var i = 0; i < this.trail.length; i++) {
+    var t = this.trail[i];
+    var alpha = (i / this.trail.length) * this.life * 0.3;
+    ctx.beginPath();
+    ctx.arc(t.x, t.y, this.size * 0.5 * (i / this.trail.length), 0, Math.PI * 2);
+    ctx.fillStyle = this.color + alpha + ')';
+    ctx.fill();
+  }
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
+  ctx.fillStyle = this.color + (this.life * 0.8) + ')';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size * this.life * 2.5, 0, Math.PI * 2);
+  ctx.fillStyle = this.color + (this.life * 0.1) + ')';
+  ctx.fill();
+};
 
 // ──── Ring Effect on Click ────
-const rings = [];
-class Ring {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.radius = 0;
-    this.maxRadius = 40 + Math.random() * 20;
-    this.life = 1;
-    this.speed = 1.5;
-  }
-  update() {
-    this.radius += this.speed;
-    this.life = 1 - (this.radius / this.maxRadius);
-    return this.life > 0;
-  }
-  draw(ctx) {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(100, 255, 218, ${this.life * 0.15})`;
-    ctx.lineWidth = 1.5 * this.life;
-    ctx.stroke();
-  }
+var rings = [];
+function Ring(x, y) {
+  this.x = x;
+  this.y = y;
+  this.radius = 0;
+  this.maxRadius = 40 + Math.random() * 20;
+  this.life = 1;
+  this.speed = 1.5;
 }
+Ring.prototype.update = function() {
+  this.radius += this.speed;
+  this.life = 1 - (this.radius / this.maxRadius);
+  return this.life > 0;
+};
+Ring.prototype.draw = function(ctx) {
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(100, 255, 218, ' + (this.life * 0.15) + ')';
+  ctx.lineWidth = 1.5 * this.life;
+  ctx.stroke();
+};
 
 // ──── Events ────
 function onMove(x, y) {
@@ -447,126 +628,894 @@ function onMove(x, y) {
   trailPoints.push(new TrailPoint(x, y));
   if (trailPoints.length > MAX_TRAIL) trailPoints.shift();
 
-  // Spawn subtle trail particles
   if (Math.random() < 0.4) {
     particles.push(new Particle(x + (Math.random() - 0.5) * 8, y + (Math.random() - 0.5) * 8));
   }
 }
 
-document.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', function(e) {
   onMove(e.clientX, e.clientY);
 });
 
-document.addEventListener('touchmove', (e) => {
+document.addEventListener('touchmove', function(e) {
   isTouch = true;
-  const t = e.touches[0];
+  var t = e.touches[0];
   onMove(t.clientX, t.clientY);
 }, { passive: true });
 
 function doBurst(x, y) {
-  const count = 12 + Math.floor(Math.random() * 8);
-  for (let i = 0; i < count; i++) {
+  var count = 12 + Math.floor(Math.random() * 8);
+  for (var i = 0; i < count; i++) {
     burstParticles.push(new BurstParticle(x, y));
   }
   rings.push(new Ring(x, y));
 }
 
-document.addEventListener('mousedown', (e) => {
+document.addEventListener('mousedown', function(e) {
   cursor.classList.add('clicking');
   doBurst(e.clientX, e.clientY);
 });
-document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
+document.addEventListener('mouseup', function() { cursor.classList.remove('clicking'); });
 
-document.addEventListener('touchstart', (e) => {
+document.addEventListener('touchstart', function(e) {
   isTouch = true;
-  const t = e.touches[0];
+  var t = e.touches[0];
   doBurst(t.clientX, t.clientY);
 }, { passive: true });
 
 // ──── Ambient Floating Particles ────
-const ambientParticles = [];
-class AmbientParticle {
-  constructor() {
+var ambientParticles = [];
+function AmbientParticle() {
+  this.reset();
+}
+AmbientParticle.prototype.reset = function() {
+  this.x = Math.random() * W;
+  this.y = Math.random() * H;
+  this.size = 0.5 + Math.random() * 1.5;
+  this.speedX = (Math.random() - 0.5) * 0.3;
+  this.speedY = (Math.random() - 0.5) * 0.3;
+  this.opacity = Math.random() * 0.15;
+  this.pulse = Math.random() * Math.PI * 2;
+  this.pulseSpeed = 0.01 + Math.random() * 0.02;
+};
+AmbientParticle.prototype.update = function() {
+  this.x += this.speedX;
+  this.y += this.speedY;
+  this.pulse += this.pulseSpeed;
+  if (this.x < -10 || this.x > W + 10 || this.y < -10 || this.y > H + 10) {
     this.reset();
   }
-  reset() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.size = 0.5 + Math.random() * 1.5;
-    this.speedX = (Math.random() - 0.5) * 0.3;
-    this.speedY = (Math.random() - 0.5) * 0.3;
-    this.opacity = Math.random() * 0.15;
-    this.pulse = Math.random() * Math.PI * 2;
-    this.pulseSpeed = 0.01 + Math.random() * 0.02;
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.pulse += this.pulseSpeed;
-    if (this.x < -10 || this.x > W + 10 || this.y < -10 || this.y > H + 10) {
-      this.reset();
-    }
-  }
-  draw(ctx) {
-    const o = this.opacity * (0.5 + 0.5 * Math.sin(this.pulse));
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(100, 255, 218, ${o})`;
-    ctx.fill();
-  }
-}
+};
+AmbientParticle.prototype.draw = function(ctx) {
+  var o = this.opacity * (0.5 + 0.5 * Math.sin(this.pulse));
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(100, 255, 218, ' + o + ')';
+  ctx.fill();
+};
 
-for (let i = 0; i < 60; i++) {
+for (var i = 0; i < 90; i++) {
   ambientParticles.push(new AmbientParticle());
 }
 
-// ──── Render Loop ────
+// ──── Flowing Orbital Particles (lissajous/sine-wave motion) ────
+var orbitParticles = [];
+function OrbitParticle(index, total) {
+  this.index = index;
+  this.total = total;
+  this.angle = (index / total) * Math.PI * 2;
+  this.speed = 0.002 + Math.random() * 0.003;
+  this.radiusX = 0.15 + Math.random() * 0.3; // as fraction of W
+  this.radiusY = 0.15 + Math.random() * 0.25; // as fraction of H
+  this.centerX = 0.3 + Math.random() * 0.4; // fraction of W
+  this.centerY = 0.3 + Math.random() * 0.4; // fraction of H
+  this.freqX = 1 + Math.floor(Math.random() * 3);
+  this.freqY = 1 + Math.floor(Math.random() * 3);
+  if (this.freqX === this.freqY) this.freqY += 1;
+  this.phase = Math.random() * Math.PI * 2;
+  this.size = 0.8 + Math.random() * 1.2;
+  this.opacity = 0.04 + Math.random() * 0.08;
+  this.trail = [];
+}
+OrbitParticle.prototype.update = function() {
+  this.angle += this.speed;
+  this.x = this.centerX * W + Math.sin(this.angle * this.freqX + this.phase) * this.radiusX * W;
+  this.y = this.centerY * H + Math.cos(this.angle * this.freqY) * this.radiusY * H;
+  this.trail.push({ x: this.x, y: this.y });
+  if (this.trail.length > 12) this.trail.shift();
+};
+OrbitParticle.prototype.draw = function(ctx) {
+  // Draw fading trail
+  if (this.trail.length > 2) {
+    ctx.beginPath();
+    ctx.moveTo(this.trail[0].x, this.trail[0].y);
+    for (var i = 1; i < this.trail.length; i++) {
+      ctx.lineTo(this.trail[i].x, this.trail[i].y);
+    }
+    ctx.strokeStyle = 'rgba(124, 92, 252, ' + (this.opacity * 0.4) + ')';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+  // Draw particle
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(124, 92, 252, ' + this.opacity + ')';
+  ctx.fill();
+  // Glow
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(124, 92, 252, ' + (this.opacity * 0.15) + ')';
+  ctx.fill();
+};
+
+for (var i = 0; i < 20; i++) {
+  orbitParticles.push(new OrbitParticle(i, 20));
+}
+
+// ──── Constellation Lines (connect nearby ambient particles) ────
+var CONSTELLATION_DIST = 120;
+
+// ════════════════════════════════════════════
+// ──── OPTION 1: THE LIVING AVATAR ────
+// ════════════════════════════════════════════
+
+// ──── Category Definitions ────
+var CATEGORIES = [
+  {
+    key: 'languages',
+    label: '< Languages />',
+    filename: 'brolio.ts',
+    hatColors: { main: '#d94040', light: '#e85555', dark: '#a82e2e', accent: '#ff7070' },
+    snippet: [
+      { text: '// who is this guy?\n', cls: 'cm' },
+      { text: 'const ', cls: 'kw' },
+      { text: 'dev', cls: 'fn' },
+      { text: ' = {\n', cls: 'punc' },
+      { text: '  name', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: '"Mariano"', cls: 'str' },
+      { text: ',\n', cls: 'punc' },
+      { text: '  role', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: '"full-stack engineer"', cls: 'str' },
+      { text: ',\n', cls: 'punc' },
+      { text: '  since', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: "'06", cls: 'str' },
+      { text: ',\n', cls: 'punc' },
+      { text: '  available', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: 'false', cls: 'kw' },
+      { text: '\n};', cls: 'punc' }
+    ]
+  },
+  {
+    key: 'frontend',
+    label: '< Frontend />',
+    filename: 'App.tsx',
+    hatColors: { main: '#2a9fd6', light: '#61dafb', dark: '#1a6e99', accent: '#88e8ff' },
+    snippet: [
+      { text: 'function ', cls: 'kw' },
+      { text: 'Portfolio', cls: 'fn' },
+      { text: '() {\n', cls: 'punc' },
+      { text: '  return (\n', cls: 'kw' },
+      { text: '    <', cls: 'punc' },
+      { text: 'Card', cls: 'fn' },
+      { text: ' ', cls: 'type' },
+      { text: 'variant', cls: 'prop' },
+      { text: '=', cls: 'punc' },
+      { text: '"glow"', cls: 'str' },
+      { text: '>\n', cls: 'punc' },
+      { text: '      <', cls: 'punc' },
+      { text: 'h1', cls: 'fn' },
+      { text: '>', cls: 'punc' },
+      { text: 'brolio.dev', cls: 'type' },
+      { text: '</', cls: 'punc' },
+      { text: 'h1', cls: 'fn' },
+      { text: '>\n', cls: 'punc' },
+      { text: '      <', cls: 'punc' },
+      { text: 'Status ', cls: 'fn' },
+      { text: 'online', cls: 'prop' },
+      { text: '={', cls: 'punc' },
+      { text: 'false', cls: 'kw' },
+      { text: '} />\n', cls: 'punc' },
+      { text: '    </', cls: 'punc' },
+      { text: 'Card', cls: 'fn' },
+      { text: '>\n', cls: 'punc' },
+      { text: '  );\n}', cls: 'punc' }
+    ]
+  },
+  {
+    key: 'database',
+    label: '< Database />',
+    filename: 'schema.sql',
+    hatColors: { main: '#d4a017', light: '#ffd633', dark: '#a07b0e', accent: '#ffe066' },
+    snippet: [
+      { text: 'CREATE TABLE ', cls: 'kw' },
+      { text: 'developers', cls: 'fn' },
+      { text: ' (\n', cls: 'punc' },
+      { text: '  id    ', cls: 'prop' },
+      { text: 'SERIAL PRIMARY KEY', cls: 'kw' },
+      { text: ',\n', cls: 'punc' },
+      { text: '  name  ', cls: 'prop' },
+      { text: 'VARCHAR', cls: 'kw' },
+      { text: '(', cls: 'punc' },
+      { text: '64', cls: 'num' },
+      { text: '),\n', cls: 'punc' },
+      { text: '  stack ', cls: 'prop' },
+      { text: 'TEXT', cls: 'kw' },
+      { text: '[]\n);\n\n', cls: 'punc' },
+      { text: 'SELECT ', cls: 'kw' },
+      { text: '* ', cls: 'type' },
+      { text: 'FROM ', cls: 'kw' },
+      { text: 'developers\n', cls: 'fn' },
+      { text: 'WHERE ', cls: 'kw' },
+      { text: 'name ', cls: 'prop' },
+      { text: '= ', cls: 'punc' },
+      { text: "'Mariano'", cls: 'str' },
+      { text: ';', cls: 'punc' }
+    ]
+  },
+  {
+    key: 'cloud',
+    label: '< Cloud />',
+    filename: 'infra.yml',
+    hatColors: { main: '#7c5cfc', light: '#a78bfd', dark: '#5a3cc4', accent: '#c4b5fd' },
+    snippet: [
+      { text: '# brolio.dev infrastructure\n', cls: 'cm' },
+      { text: 'service', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: 'brolio-api\n', cls: 'str' },
+      { text: 'provider', cls: 'prop' },
+      { text: ':\n', cls: 'punc' },
+      { text: '  name', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: 'aws\n', cls: 'str' },
+      { text: '  runtime', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: 'nodejs20.x\n', cls: 'str' },
+      { text: '  region', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: 'us-east-1\n', cls: 'str' },
+      { text: '  memory', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: '512', cls: 'num' },
+      { text: '\n', cls: 'punc' },
+      { text: '  stage', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: 'production', cls: 'str' }
+    ]
+  },
+  {
+    key: 'devops',
+    label: '< DevOps />',
+    filename: 'Dockerfile',
+    hatColors: { main: '#e67e22', light: '#f5a623', dark: '#b35c0a', accent: '#ffc966' },
+    snippet: [
+      { text: 'FROM ', cls: 'kw' },
+      { text: 'node:20-alpine\n', cls: 'str' },
+      { text: 'WORKDIR ', cls: 'kw' },
+      { text: '/app/brolio\n\n', cls: 'str' },
+      { text: '# ship it\n', cls: 'cm' },
+      { text: 'COPY ', cls: 'kw' },
+      { text: 'package*.json ', cls: 'type' },
+      { text: '.\n', cls: 'punc' },
+      { text: 'RUN ', cls: 'kw' },
+      { text: 'npm ci --production\n', cls: 'type' },
+      { text: 'COPY ', cls: 'kw' },
+      { text: '. .\n\n', cls: 'punc' },
+      { text: 'EXPOSE ', cls: 'kw' },
+      { text: '3000', cls: 'num' },
+      { text: '\n', cls: 'punc' },
+      { text: 'CMD ', cls: 'kw' },
+      { text: '["node", "server.js"]', cls: 'str' }
+    ]
+  },
+  {
+    key: 'ai',
+    label: '< AI />',
+    filename: 'agent.json',
+    hatColors: { main: '#22c55e', light: '#4ade80', dark: '#15803d', accent: '#a3ffca' },
+    snippet: [
+      { text: '{\n', cls: 'punc' },
+      { text: '  "name"', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: '"brolio-agent"', cls: 'str' },
+      { text: ',\n', cls: 'punc' },
+      { text: '  "model"', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: '"claude-opus-4"', cls: 'str' },
+      { text: ',\n', cls: 'punc' },
+      { text: '  "tools"', cls: 'prop' },
+      { text: ': [', cls: 'punc' },
+      { text: '"mcp"', cls: 'str' },
+      { text: ', ', cls: 'punc' },
+      { text: '"code"', cls: 'str' },
+      { text: ', ', cls: 'punc' },
+      { text: '"deploy"', cls: 'str' },
+      { text: '],\n', cls: 'punc' },
+      { text: '  "personality"', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: '"ships fast"', cls: 'str' },
+      { text: ',\n', cls: 'punc' },
+      { text: '  "caffeinated"', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: 'true', cls: 'kw' },
+      { text: '\n}', cls: 'punc' }
+    ]
+  },
+  {
+    key: 'api',
+    label: '< API />',
+    filename: 'server.ts',
+    hatColors: { main: '#c0c0c0', light: '#e0e0e0', dark: '#888888', accent: '#ffffff' },
+    snippet: [
+      { text: 'import ', cls: 'kw' },
+      { text: 'express ', cls: 'fn' },
+      { text: 'from ', cls: 'kw' },
+      { text: "'express'", cls: 'str' },
+      { text: ';\n\n', cls: 'punc' },
+      { text: 'const ', cls: 'kw' },
+      { text: 'app ', cls: 'fn' },
+      { text: '= ', cls: 'punc' },
+      { text: 'express', cls: 'fn' },
+      { text: '();\n\n', cls: 'punc' },
+      { text: 'app.', cls: 'type' },
+      { text: 'get', cls: 'fn' },
+      { text: '(', cls: 'punc' },
+      { text: '"/api/brolio"', cls: 'str' },
+      { text: ', (', cls: 'punc' },
+      { text: 'req, res', cls: 'prop' },
+      { text: ') => {\n', cls: 'punc' },
+      { text: '  res.', cls: 'type' },
+      { text: 'json', cls: 'fn' },
+      { text: '({ ', cls: 'punc' },
+      { text: 'status', cls: 'prop' },
+      { text: ': ', cls: 'punc' },
+      { text: '"shipping"', cls: 'str' },
+      { text: ' });\n', cls: 'punc' },
+      { text: '});', cls: 'punc' }
+    ]
+  }
+];
+
+// ──── Pixel Art: Base Character (16x16) ────
+// 0=transparent, 1=hair, 2=skin, 3=beard, 4=shirt, 5=eye-white, 6=mouth, 7=mustache(darker)
+var BASE_CHAR = [
+  [0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0],
+  [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],
+  [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
+  [0,0,0,1,2,2,2,2,2,2,2,2,1,0,0,0],
+  [0,0,1,2,2,2,2,2,2,2,2,2,2,1,0,0],
+  [0,0,1,2,2,5,2,2,2,5,2,2,2,1,0,0],
+  [0,0,0,2,2,2,2,2,2,2,2,2,2,0,0,0],
+  [0,0,0,2,7,7,2,6,2,7,7,2,2,0,0,0],
+  [0,0,0,3,3,3,3,3,3,3,3,3,3,0,0,0],
+  [0,0,0,0,3,3,3,3,3,3,3,3,0,0,0,0],
+  [0,0,0,0,0,3,3,3,3,3,3,0,0,0,0,0],
+  [0,0,0,4,4,4,4,4,4,4,4,4,4,0,0,0],
+  [0,0,4,4,4,4,4,4,4,4,4,4,4,4,0,0],
+  [0,0,4,4,2,4,4,4,4,4,4,2,4,4,0,0],
+  [0,0,0,0,2,4,4,4,4,4,4,2,0,0,0,0],
+  [0,0,0,0,0,0,4,4,4,4,0,0,0,0,0,0]
+];
+
+var BASE_COLORS = {
+  1: '#2a2035',
+  2: '#d4a574',
+  3: '#3d2010',
+  4: '#1a1a2e',
+  5: '#e8e6e3',
+  6: '#c0392b',
+  7: '#2a1508'
+};
+
+// ──── Hat Pixel Overlays (16x16 grids, only hat pixels) ────
+// Each hat definition: array of { x, y, colorKey } where colorKey maps to hatColors
+
+// Languages - chunky knit BEANIE with fold-up brim and pom-pom on top
+var HAT_LANGUAGES = [
+  // pom-pom (row -2 using negative offset trick — we'll use extra rows above via y:-1 etc. but since canvas is 16x16 starting at 0, we use rows 0-2)
+  // Pom-pom ball at very top
+  {x:7,y:-2,c:'accent'},{x:8,y:-2,c:'accent'},
+  {x:6,y:-1,c:'light'},{x:7,y:-1,c:'light'},{x:8,y:-1,c:'accent'},{x:9,y:-1,c:'light'},
+  // Beanie dome (rounded top)
+  {x:6,y:0,c:'main'},{x:7,y:0,c:'main'},{x:8,y:0,c:'light'},{x:9,y:0,c:'main'},
+  {x:4,y:1,c:'main'},{x:5,y:1,c:'dark'},{x:6,y:1,c:'main'},{x:7,y:1,c:'light'},{x:8,y:1,c:'main'},{x:9,y:1,c:'dark'},{x:10,y:1,c:'main'},{x:11,y:1,c:'main'},
+  // Folded brim (thicker band with ribbed pattern)
+  {x:3,y:2,c:'dark'},{x:4,y:2,c:'light'},{x:5,y:2,c:'dark'},{x:6,y:2,c:'light'},{x:7,y:2,c:'dark'},{x:8,y:2,c:'light'},{x:9,y:2,c:'dark'},{x:10,y:2,c:'light'},{x:11,y:2,c:'dark'},{x:12,y:2,c:'light'}
+];
+
+// Frontend - React HEADBAND with atom symbol orbiting
+var HAT_FRONTEND = [
+  // Floating electron dots
+  {x:4,y:-1,c:'accent'},{x:11,y:-1,c:'accent'},
+  // Orbital ring across top
+  {x:5,y:0,c:'dark'},{x:6,y:0,c:'light'},{x:7,y:0,c:'accent'},{x:8,y:0,c:'accent'},{x:9,y:0,c:'light'},{x:10,y:0,c:'dark'},
+  // Hair visible in row 1, headband sits at row 2
+  {x:4,y:1,c:'dark'},{x:5,y:1,c:'main'},{x:6,y:1,c:'main'},{x:7,y:1,c:'main'},{x:8,y:1,c:'main'},{x:9,y:1,c:'main'},{x:10,y:1,c:'main'},{x:11,y:1,c:'dark'},
+  // Thick headband with React atom core in center
+  {x:3,y:2,c:'main'},{x:4,y:2,c:'main'},{x:5,y:2,c:'light'},{x:6,y:2,c:'main'},{x:7,y:2,c:'accent'},{x:8,y:2,c:'accent'},{x:9,y:2,c:'main'},{x:10,y:2,c:'light'},{x:11,y:2,c:'main'},{x:12,y:2,c:'main'}
+];
+
+// Database - HARD HAT with flat brim and ridge on top
+var HAT_DATABASE = [
+  // Ridge/crest on top
+  {x:7,y:-1,c:'light'},{x:8,y:-1,c:'light'},
+  // Rounded dome
+  {x:5,y:0,c:'main'},{x:6,y:0,c:'light'},{x:7,y:0,c:'accent'},{x:8,y:0,c:'accent'},{x:9,y:0,c:'light'},{x:10,y:0,c:'main'},
+  {x:4,y:1,c:'main'},{x:5,y:1,c:'light'},{x:6,y:1,c:'main'},{x:7,y:1,c:'main'},{x:8,y:1,c:'main'},{x:9,y:1,c:'main'},{x:10,y:1,c:'light'},{x:11,y:1,c:'main'},
+  // Wide brim extending past head
+  {x:1,y:2,c:'dark'},{x:2,y:2,c:'main'},{x:3,y:2,c:'main'},{x:4,y:2,c:'main'},{x:5,y:2,c:'main'},{x:6,y:2,c:'main'},{x:7,y:2,c:'main'},{x:8,y:2,c:'main'},{x:9,y:2,c:'main'},{x:10,y:2,c:'main'},{x:11,y:2,c:'main'},{x:12,y:2,c:'main'},{x:13,y:2,c:'main'},{x:14,y:2,c:'dark'}
+];
+
+// Cloud - tall WIZARD HAT with star and pointed tip
+var HAT_CLOUD = [
+  // Pointed tip with star
+  {x:8,y:-3,c:'accent'},
+  {x:7,y:-2,c:'light'},{x:8,y:-2,c:'light'},
+  // Tall cone
+  {x:7,y:-1,c:'main'},{x:8,y:-1,c:'main'},{x:9,y:-1,c:'dark'},
+  {x:6,y:0,c:'main'},{x:7,y:0,c:'light'},{x:8,y:0,c:'main'},{x:9,y:0,c:'main'},
+  // Widening body with moon/star detail
+  {x:5,y:1,c:'dark'},{x:6,y:1,c:'main'},{x:7,y:1,c:'accent'},{x:8,y:1,c:'main'},{x:9,y:1,c:'main'},{x:10,y:1,c:'dark'},
+  // Wide brim
+  {x:2,y:2,c:'dark'},{x:3,y:2,c:'main'},{x:4,y:2,c:'light'},{x:5,y:2,c:'main'},{x:6,y:2,c:'main'},{x:7,y:2,c:'main'},{x:8,y:2,c:'main'},{x:9,y:2,c:'main'},{x:10,y:2,c:'main'},{x:11,y:2,c:'light'},{x:12,y:2,c:'main'},{x:13,y:2,c:'dark'}
+];
+
+// DevOps - BACKWARDS CAP with flat bill sticking out the back
+var HAT_DEVOPS = [
+  // Cap dome
+  {x:6,y:0,c:'main'},{x:7,y:0,c:'light'},{x:8,y:0,c:'light'},{x:9,y:0,c:'main'},
+  {x:4,y:1,c:'main'},{x:5,y:1,c:'main'},{x:6,y:1,c:'light'},{x:7,y:1,c:'accent'},{x:8,y:1,c:'main'},{x:9,y:1,c:'main'},{x:10,y:1,c:'main'},{x:11,y:1,c:'main'},
+  // Band + backwards bill extending right
+  {x:3,y:2,c:'dark'},{x:4,y:2,c:'dark'},{x:5,y:2,c:'main'},{x:6,y:2,c:'main'},{x:7,y:2,c:'main'},{x:8,y:2,c:'main'},{x:9,y:2,c:'main'},{x:10,y:2,c:'main'},{x:11,y:2,c:'main'},{x:12,y:2,c:'main'},{x:13,y:2,c:'dark'},{x:14,y:2,c:'dark'},{x:15,y:2,c:'dark'}
+];
+
+// AI - ROBOT ANTENNA headpiece with glowing tips and visor
+var HAT_AI = [
+  // Antenna tips (glowing dots)
+  {x:5,y:-2,c:'accent'},{x:10,y:-2,c:'accent'},
+  // Antenna stalks
+  {x:5,y:-1,c:'dark'},{x:10,y:-1,c:'dark'},
+  // Antenna base + circuit line across top
+  {x:5,y:0,c:'main'},{x:6,y:0,c:'light'},{x:7,y:0,c:'accent'},{x:8,y:0,c:'accent'},{x:9,y:0,c:'light'},{x:10,y:0,c:'main'},
+  // Visor band with LED strip
+  {x:4,y:1,c:'dark'},{x:5,y:1,c:'main'},{x:6,y:1,c:'main'},{x:7,y:1,c:'light'},{x:8,y:1,c:'light'},{x:9,y:1,c:'main'},{x:10,y:1,c:'main'},{x:11,y:1,c:'dark'},
+  // Headband base
+  {x:3,y:2,c:'main'},{x:4,y:2,c:'light'},{x:5,y:2,c:'accent'},{x:6,y:2,c:'main'},{x:7,y:2,c:'accent'},{x:8,y:2,c:'accent'},{x:9,y:2,c:'main'},{x:10,y:2,c:'accent'},{x:11,y:2,c:'light'},{x:12,y:2,c:'main'}
+];
+
+// API - tall TOP HAT with band
+var HAT_API = [
+  // Flat top
+  {x:5,y:-2,c:'main'},{x:6,y:-2,c:'light'},{x:7,y:-2,c:'light'},{x:8,y:-2,c:'light'},{x:9,y:-2,c:'light'},{x:10,y:-2,c:'main'},
+  // Tall body
+  {x:5,y:-1,c:'dark'},{x:6,y:-1,c:'main'},{x:7,y:-1,c:'light'},{x:8,y:-1,c:'light'},{x:9,y:-1,c:'main'},{x:10,y:-1,c:'dark'},
+  {x:5,y:0,c:'dark'},{x:6,y:0,c:'main'},{x:7,y:0,c:'main'},{x:8,y:0,c:'main'},{x:9,y:0,c:'main'},{x:10,y:0,c:'dark'},
+  // Accent band
+  {x:5,y:1,c:'accent'},{x:6,y:1,c:'accent'},{x:7,y:1,c:'accent'},{x:8,y:1,c:'accent'},{x:9,y:1,c:'accent'},{x:10,y:1,c:'accent'},
+  // Wide brim
+  {x:2,y:2,c:'dark'},{x:3,y:2,c:'main'},{x:4,y:2,c:'main'},{x:5,y:2,c:'light'},{x:6,y:2,c:'light'},{x:7,y:2,c:'light'},{x:8,y:2,c:'light'},{x:9,y:2,c:'light'},{x:10,y:2,c:'light'},{x:11,y:2,c:'main'},{x:12,y:2,c:'main'},{x:13,y:2,c:'dark'}
+];
+
+var HATS = [HAT_LANGUAGES, HAT_FRONTEND, HAT_DATABASE, HAT_CLOUD, HAT_DEVOPS, HAT_AI, HAT_API];
+
+// ──── Avatar Rendering ────
+var avatarCanvas = document.getElementById('avatar-canvas');
+var avatarCtx = avatarCanvas.getContext('2d');
+var PIXEL = 8;
+var HAT_EXTRA_ROWS = 4; // extra rows above for tall hats
+avatarCanvas.width = 16 * PIXEL;
+avatarCanvas.height = (16 + HAT_EXTRA_ROWS) * PIXEL;
+var AVATAR_OFFSET_Y = HAT_EXTRA_ROWS * PIXEL; // base character drawn offset down
+
+function drawBaseCharacter() {
+  for (var y = 0; y < 16; y++) {
+    for (var x = 0; x < 16; x++) {
+      var val = BASE_CHAR[y][x];
+      if (val === 0) continue;
+      avatarCtx.fillStyle = BASE_COLORS[val];
+      avatarCtx.fillRect(x * PIXEL, (y * PIXEL) + AVATAR_OFFSET_Y, PIXEL, PIXEL);
+    }
+  }
+}
+
+function drawHat(categoryIndex) {
+  var hat = HATS[categoryIndex];
+  var colors = CATEGORIES[categoryIndex].hatColors;
+  for (var i = 0; i < hat.length; i++) {
+    var p = hat[i];
+    avatarCtx.fillStyle = colors[p.c];
+    avatarCtx.fillRect(p.x * PIXEL, (p.y * PIXEL) + AVATAR_OFFSET_Y, PIXEL, PIXEL);
+  }
+}
+
+function renderAvatar(categoryIndex) {
+  avatarCtx.clearRect(0, 0, avatarCanvas.width, avatarCanvas.height);
+  drawBaseCharacter();
+  drawHat(categoryIndex);
+}
+
+// ──── Hat Swap Particle System ────
+var hatParticles = [];
+
+function HatPixelParticle(x, y, color, direction) {
+  this.x = x;
+  this.y = y;
+  this.targetX = x;
+  this.targetY = y;
+  this.color = color;
+  this.life = 1;
+  this.size = PIXEL;
+  this.direction = direction;
+
+  if (direction === 'up') {
+    this.vx = (Math.random() - 0.5) * 3;
+    this.vy = -(1 + Math.random() * 2.5);
+    this.decay = 0.025 + Math.random() * 0.02;
+  } else {
+    this.startY = y - 60 - Math.random() * 40;
+    this.y = this.startY;
+    this.progress = 0;
+    this.speed = 0.03 + Math.random() * 0.015;
+    this.settled = false;
+  }
+}
+
+HatPixelParticle.prototype.update = function() {
+  if (this.direction === 'up') {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy -= 0.02;
+    this.life -= this.decay;
+    return this.life > 0;
+  } else {
+    if (this.settled) return false;
+    this.progress += this.speed;
+    if (this.progress >= 1) {
+      this.progress = 1;
+      this.settled = true;
+    }
+    var t = this.progress;
+    var ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    if (t > 0.85) {
+      var bounce = Math.sin((t - 0.85) / 0.15 * Math.PI) * 3;
+      this.y = this.startY + (this.targetY - this.startY) * ease - bounce;
+    } else {
+      this.y = this.startY + (this.targetY - this.startY) * ease;
+    }
+    this.life = Math.min(1, this.progress * 3);
+    return !this.settled;
+  }
+};
+
+HatPixelParticle.prototype.draw = function(aCtx) {
+  aCtx.globalAlpha = this.life;
+  aCtx.fillStyle = this.color;
+  if (this.direction === 'up') {
+    aCtx.fillRect(this.x, this.y, this.size * this.life, this.size * this.life);
+  } else {
+    aCtx.fillRect(this.x, this.y, this.size, this.size);
+  }
+  aCtx.globalAlpha = 1;
+};
+
+// ──── Avatar Animation Loop ────
+var avatarAnimating = false;
+
+function animateAvatar() {
+  if (!avatarAnimating && hatParticles.length === 0) return;
+
+  avatarCtx.clearRect(0, 0, avatarCanvas.width, avatarCanvas.height);
+  drawBaseCharacter();
+  drawHat(currentCategory);
+
+  for (var i = hatParticles.length - 1; i >= 0; i--) {
+    if (!hatParticles[i].update()) {
+      if (hatParticles[i].direction === 'down' && hatParticles[i].settled) {
+        hatParticles.splice(i, 1);
+      } else {
+        hatParticles.splice(i, 1);
+      }
+    } else {
+      hatParticles[i].draw(avatarCtx);
+    }
+  }
+
+  if (hatParticles.length > 0) {
+    requestAnimationFrame(animateAvatar);
+  } else {
+    avatarAnimating = false;
+    renderAvatar(currentCategory);
+  }
+}
+
+function startAvatarAnimation() {
+  if (!avatarAnimating) {
+    avatarAnimating = true;
+    animateAvatar();
+  }
+}
+
+// ──── Category State Machine ────
+var currentCategory = 0;
+var autoCycleTimer = null;
+var categoryLabelEl = document.getElementById('categoryLabel');
+var codeFilenameEl = document.getElementById('codeFilename');
+var codeContentEl = document.getElementById('codeContent');
+var allTags = document.querySelectorAll('.tech-tag');
+
+function getCategoryIndex(key) {
+  for (var i = 0; i < CATEGORIES.length; i++) {
+    if (CATEGORIES[i].key === key) return i;
+  }
+  return 0;
+}
+
+function updateActiveTags(categoryKey) {
+  for (var i = 0; i < allTags.length; i++) {
+    if (allTags[i].getAttribute('data-category') === categoryKey) {
+      allTags[i].classList.add('active');
+    } else {
+      allTags[i].classList.remove('active');
+    }
+  }
+}
+
+// ──── Typewriter for Category Label ────
+var labelTypeTimer = null;
+
+function typeLabel(text) {
+  if (labelTypeTimer) clearInterval(labelTypeTimer);
+  var currentText = categoryLabelEl.textContent;
+  var eraseLen = currentText.length;
+  var phase = 'erase';
+  var charIndex = eraseLen;
+
+  labelTypeTimer = setInterval(function() {
+    if (phase === 'erase') {
+      charIndex--;
+      categoryLabelEl.textContent = currentText.substring(0, charIndex);
+      if (charIndex <= 0) {
+        phase = 'type';
+        charIndex = 0;
+      }
+    } else {
+      charIndex++;
+      categoryLabelEl.textContent = text.substring(0, charIndex);
+      if (charIndex >= text.length) {
+        clearInterval(labelTypeTimer);
+        labelTypeTimer = null;
+      }
+    }
+  }, 35);
+}
+
+// ──── Typewriter for Code Window ────
+var codeTypeTimer = null;
+var codeFullHTML = '';
+
+function typeCode(snippetParts) {
+  if (codeTypeTimer) clearInterval(codeTypeTimer);
+
+  var segments = [];
+  for (var p = 0; p < snippetParts.length; p++) {
+    var part = snippetParts[p];
+    for (var c = 0; c < part.text.length; c++) {
+      segments.push({ char: part.text[c], cls: part.cls });
+    }
+  }
+
+  var built = '';
+  var segIndex = 0;
+  var currentSpanCls = null;
+
+  codeContentEl.innerHTML = '<span class="cursor-blink"></span>';
+
+  codeTypeTimer = setInterval(function() {
+    if (segIndex >= segments.length) {
+      clearInterval(codeTypeTimer);
+      codeTypeTimer = null;
+      codeContentEl.innerHTML = built + '<span class="cursor-blink"></span>';
+      return;
+    }
+
+    var seg = segments[segIndex];
+    var ch = seg.char;
+
+    if (ch === '<') ch = '&lt;';
+    else if (ch === '>') ch = '&gt;';
+    else if (ch === '&') ch = '&amp;';
+
+    if (seg.cls !== currentSpanCls) {
+      if (currentSpanCls !== null) built += '</span>';
+      built += '<span class="' + seg.cls + '">';
+      currentSpanCls = seg.cls;
+    }
+    built += ch;
+
+    segIndex++;
+    codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '<span class="cursor-blink"></span>';
+    var codeBody = codeContentEl.closest('.code-body');
+    codeBody.scrollTop = codeBody.scrollHeight;
+  }, 18);
+}
+
+// ──── Fire burst at avatar position ────
+function burstAtAvatar() {
+  var rect = avatarCanvas.getBoundingClientRect();
+  var cx = rect.left + rect.width / 2;
+  var cy = rect.top + rect.height / 2;
+  var count = 10 + Math.floor(Math.random() * 6);
+  for (var i = 0; i < count; i++) {
+    burstParticles.push(new BurstParticle(cx, cy));
+  }
+  rings.push(new Ring(cx, cy));
+}
+
+// ──── Switch Category ────
+function switchCategory(newIndex) {
+  if (newIndex === currentCategory) return;
+
+  var oldIndex = currentCategory;
+  var oldHat = HATS[oldIndex];
+  var oldColors = CATEGORIES[oldIndex].hatColors;
+
+  for (var i = 0; i < oldHat.length; i++) {
+    var p = oldHat[i];
+    var px = p.x * PIXEL;
+    var py = (p.y * PIXEL) + AVATAR_OFFSET_Y;
+    hatParticles.push(new HatPixelParticle(px, py, oldColors[p.c], 'up'));
+  }
+
+  currentCategory = newIndex;
+
+  setTimeout(function() {
+    burstAtAvatar();
+
+    var newHat = HATS[newIndex];
+    var newColors = CATEGORIES[newIndex].hatColors;
+    for (var i = 0; i < newHat.length; i++) {
+      var p = newHat[i];
+      var px = p.x * PIXEL;
+      var py = (p.y * PIXEL) + AVATAR_OFFSET_Y;
+      hatParticles.push(new HatPixelParticle(px, py, newColors[p.c], 'down'));
+    }
+    startAvatarAnimation();
+  }, 200);
+
+  startAvatarAnimation();
+
+  var cat = CATEGORIES[newIndex];
+  updateActiveTags(cat.key);
+  typeLabel(cat.label);
+  codeFilenameEl.textContent = cat.filename;
+  typeCode(cat.snippet);
+}
+
+// ──── Auto-Cycle ────
+function resetAutoCycle() {
+  if (autoCycleTimer) clearInterval(autoCycleTimer);
+  autoCycleTimer = setInterval(function() {
+    var next = (currentCategory + 1) % CATEGORIES.length;
+    switchCategory(next);
+  }, 5000);
+}
+
+// ──── Tag Click Handlers ────
+for (var i = 0; i < allTags.length; i++) {
+  (function(tag) {
+    tag.addEventListener('click', function(e) {
+      e.preventDefault();
+      var catKey = tag.getAttribute('data-category');
+      var catIdx = getCategoryIndex(catKey);
+      switchCategory(catIdx);
+      resetAutoCycle();
+    });
+    tag.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      var catKey = tag.getAttribute('data-category');
+      var catIdx = getCategoryIndex(catKey);
+      switchCategory(catIdx);
+      resetAutoCycle();
+    });
+  })(allTags[i]);
+}
+
+// ──── Initialize ────
+function initLivingAvatar() {
+  renderAvatar(0);
+  updateActiveTags(CATEGORIES[0].key);
+  categoryLabelEl.textContent = CATEGORIES[0].label;
+  codeFilenameEl.textContent = CATEGORIES[0].filename;
+
+  var initialSnippet = CATEGORIES[0].snippet;
+  var html = '';
+  for (var p = 0; p < initialSnippet.length; p++) {
+    var text = initialSnippet[p].text;
+    var safe = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    html += '<span class="' + initialSnippet[p].cls + '">' + safe + '</span>';
+  }
+  html += '<span class="cursor-blink"></span>';
+  codeContentEl.innerHTML = html;
+
+  resetAutoCycle();
+}
+
+initLivingAvatar();
+
+// ──── Main Render Loop (existing) ────
 function animate() {
   ctx.clearRect(0, 0, W, H);
 
-  // Ambient particles
-  for (const p of ambientParticles) {
-    p.update();
-    p.draw(ctx);
+  // Orbital particles (lissajous flowing motion)
+  for (var i = 0; i < orbitParticles.length; i++) {
+    orbitParticles[i].update();
+    orbitParticles[i].draw(ctx);
   }
 
-  // Mouse trail ribbon
+  // Ambient particles
+  for (var i = 0; i < ambientParticles.length; i++) {
+    ambientParticles[i].update();
+    ambientParticles[i].draw(ctx);
+  }
+
+  // Constellation lines between nearby ambient particles
+  for (var i = 0; i < ambientParticles.length; i++) {
+    for (var j = i + 1; j < ambientParticles.length; j++) {
+      var dx = ambientParticles[i].x - ambientParticles[j].x;
+      var dy = ambientParticles[i].y - ambientParticles[j].y;
+      var distSq = dx * dx + dy * dy;
+      if (distSq < CONSTELLATION_DIST * CONSTELLATION_DIST) {
+        var dist = Math.sqrt(distSq);
+        var alpha = (1 - dist / CONSTELLATION_DIST) * 0.06;
+        ctx.beginPath();
+        ctx.moveTo(ambientParticles[i].x, ambientParticles[i].y);
+        ctx.lineTo(ambientParticles[j].x, ambientParticles[j].y);
+        ctx.strokeStyle = 'rgba(100, 255, 218, ' + alpha + ')';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+
   if (trailPoints.length > 2) {
-    for (let i = trailPoints.length - 1; i >= 0; i--) {
+    for (var i = trailPoints.length - 1; i >= 0; i--) {
       if (!trailPoints[i].update()) {
         trailPoints.splice(i, 1);
       }
     }
 
-    ctx.beginPath();
-    ctx.moveTo(trailPoints[0].x, trailPoints[0].y);
-    for (let i = 1; i < trailPoints.length - 1; i++) {
-      const xc = (trailPoints[i].x + trailPoints[i + 1].x) / 2;
-      const yc = (trailPoints[i].y + trailPoints[i + 1].y) / 2;
-      ctx.quadraticCurveTo(trailPoints[i].x, trailPoints[i].y, xc, yc);
+    if (trailPoints.length > 2) {
+      ctx.beginPath();
+      ctx.moveTo(trailPoints[0].x, trailPoints[0].y);
+      for (var i = 1; i < trailPoints.length - 1; i++) {
+        var xc = (trailPoints[i].x + trailPoints[i + 1].x) / 2;
+        var yc = (trailPoints[i].y + trailPoints[i + 1].y) / 2;
+        ctx.quadraticCurveTo(trailPoints[i].x, trailPoints[i].y, xc, yc);
+      }
+
+      var gradient = ctx.createLinearGradient(
+        trailPoints[0].x, trailPoints[0].y,
+        trailPoints[trailPoints.length - 1].x, trailPoints[trailPoints.length - 1].y
+      );
+      gradient.addColorStop(0, 'rgba(100, 255, 218, 0)');
+      gradient.addColorStop(0.5, 'rgba(100, 255, 218, 0.15)');
+      gradient.addColorStop(1, 'rgba(124, 92, 252, 0.2)');
+
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(100, 255, 218, 0.04)';
+      ctx.lineWidth = 12;
+      ctx.stroke();
     }
-
-    const gradient = ctx.createLinearGradient(
-      trailPoints[0].x, trailPoints[0].y,
-      trailPoints[trailPoints.length - 1].x, trailPoints[trailPoints.length - 1].y
-    );
-    gradient.addColorStop(0, 'rgba(100, 255, 218, 0)');
-    gradient.addColorStop(0.5, 'rgba(100, 255, 218, 0.15)');
-    gradient.addColorStop(1, 'rgba(124, 92, 252, 0.2)');
-
-    ctx.strokeStyle = gradient;
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-
-    // Glow trail
-    ctx.strokeStyle = 'rgba(100, 255, 218, 0.04)';
-    ctx.lineWidth = 12;
-    ctx.stroke();
   }
 
-  // Trail particles
-  for (let i = particles.length - 1; i >= 0; i--) {
+  for (var i = particles.length - 1; i >= 0; i--) {
     if (!particles[i].update()) {
       particles.splice(i, 1);
     } else {
@@ -574,8 +1523,7 @@ function animate() {
     }
   }
 
-  // Burst particles
-  for (let i = burstParticles.length - 1; i >= 0; i--) {
+  for (var i = burstParticles.length - 1; i >= 0; i--) {
     if (!burstParticles[i].update()) {
       burstParticles.splice(i, 1);
     } else {
@@ -583,8 +1531,7 @@ function animate() {
     }
   }
 
-  // Rings
-  for (let i = rings.length - 1; i >= 0; i--) {
+  for (var i = rings.length - 1; i >= 0; i--) {
     if (!rings[i].update()) {
       rings.splice(i, 1);
     } else {
@@ -592,7 +1539,6 @@ function animate() {
     }
   }
 
-  // Custom cursor follow
   if (!isTouch) {
     cursorX += (mouseX - cursorX) * 0.15;
     cursorY += (mouseY - cursorY) * 0.15;
