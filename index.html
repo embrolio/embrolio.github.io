@@ -40,6 +40,53 @@ font-family: 'Outfit', sans-serif;
 cursor: none;
 }
 
+/* Matrix Mode */
+body.matrix-mode {
+--accent: #00ff41;
+--glow: rgba(0, 255, 65, 0.08);
+}
+body.matrix-mode .custom-cursor {
+border-color: #00ff41;
+}
+body.matrix-mode .cursor-dot {
+background: #00ff41;
+}
+
+/* Spotlight Glow Effect */
+.spotlight-glow {
+--spotlight-x: 50%;
+--spotlight-y: 50%;
+position: relative;
+overflow: hidden;
+}
+.spotlight-glow::before {
+content: '';
+position: absolute;
+inset: 0;
+background: radial-gradient(
+400px circle at var(--spotlight-x) var(--spotlight-y),
+rgba(100, 255, 218, 0.08),
+transparent 50%
+);
+pointer-events: none;
+opacity: 0;
+transition: opacity 0.4s ease;
+z-index: 0;
+}
+.spotlight-glow:hover::before {
+opacity: 1;
+}
+.spotlight-glow > * {
+position: relative;
+z-index: 1;
+}
+
+@media (hover: none) {
+.spotlight-glow:active::before {
+opacity: 1;
+}
+}
+
 canvas#trails {
 position: fixed;
 inset: 0;
@@ -351,8 +398,50 @@ animation: pulse-dot 2s ease-in-out infinite;
 }
 
 .status.closed .status-dot {
-background: #ff4d4d;
-box-shadow: 0 0 8px rgba(255, 77, 77, 0.3);
+  background: #ff2a2a;
+  box-shadow:
+    0 0 6px rgba(255, 42, 42, 0.8),
+    0 0 12px rgba(255, 42, 42, 0.4),
+    inset 0 0 2px rgba(255, 100, 100, 0.5);
+  animation: pulse-red 1.4s ease-out infinite;
+}
+
+@keyframes pulse-red {
+  0% {
+    transform: scale(1);
+    box-shadow:
+      0 0 6px rgba(255, 42, 42, 0.8),
+      0 0 12px rgba(255, 42, 42, 0.4),
+      0 0 0 0 rgba(255, 42, 42, 0.6);
+  }
+  15% {
+    transform: scale(1.15);
+    box-shadow:
+      0 0 8px rgba(255, 42, 42, 0.9),
+      0 0 16px rgba(255, 42, 42, 0.5),
+      0 0 0 4px rgba(255, 42, 42, 0.3);
+  }
+  30% {
+    transform: scale(1);
+    box-shadow:
+      0 0 6px rgba(255, 42, 42, 0.8),
+      0 0 12px rgba(255, 42, 42, 0.4),
+      0 0 0 8px rgba(255, 42, 42, 0.2);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 7px rgba(255, 42, 42, 0.85),
+      0 0 14px rgba(255, 42, 42, 0.45),
+      0 0 0 12px rgba(255, 42, 42, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 6px rgba(255, 42, 42, 0.8),
+      0 0 12px rgba(255, 42, 42, 0.4),
+      0 0 0 0 rgba(255, 42, 42, 0);
+  }
 }
 
 .status.closed .status-label {
@@ -469,7 +558,7 @@ html, body { cursor: auto; }
     <span class="tech-tag" data-category="ai">MCP</span>
     <span class="tech-tag" data-category="ai">Claude Code</span>
   </div>
-  <div class="code-window">
+  <div class="code-window spotlight-glow">
     <div class="code-title-bar">
       <span class="code-dot red"></span>
       <span class="code-dot yellow"></span>
@@ -487,6 +576,14 @@ html, body { cursor: auto; }
 </div>
 
 <script>
+// ──── Console Easter Egg ────
+console.log('%c🚀 brolio.dev', 'font-size: 24px; font-weight: bold; color: #64ffda;');
+console.log('%cBuilt with caffeine and questionable life choices', 'font-size: 12px; color: #7c5cfc;');
+console.log('%c━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'color: #6b6979;');
+console.log('%c→ Looking for the source? Check the Network tab', 'font-size: 11px; color: #6b6979;');
+console.log('%c→ Open to opportunities? You bet.', 'font-size: 11px; color: #6b6979;');
+console.log('%c→ Try the Konami code if you\'re feeling adventurous ↑↑↓↓←→←→BA', 'font-size: 11px; color: #64ffda;');
+
 // ──── Canvas Setup ────
 var canvas = document.getElementById('trails');
 var ctx = canvas.getContext('2d');
@@ -658,10 +755,64 @@ document.addEventListener('mousedown', function(e) {
 document.addEventListener('mouseup', function() { cursor.classList.remove('clicking'); });
 
 document.addEventListener('touchstart', function(e) {
-  isTouch = true;
-  var t = e.touches[0];
-  doBurst(t.clientX, t.clientY);
+isTouch = true;
+var t = e.touches[0];
+doBurst(t.clientX, t.clientY);
 }, { passive: true });
+
+// ──── Konami Code Easter Egg ────
+var konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+var konamiIndex = 0;
+var matrixMode = false;
+
+// Mobile alternative: 5-tap top-left corner
+var mobileKonamiCount = 0;
+var mobileKonamiTimer = null;
+var mobileKonamiZone = document.createElement('div');
+mobileKonamiZone.style.cssText = 'position:fixed;top:0;left:0;width:60px;height:60px;z-index:1;';
+document.body.appendChild(mobileKonamiZone);
+mobileKonamiZone.addEventListener('touchstart', function() {
+mobileKonamiCount++;
+clearTimeout(mobileKonamiTimer);
+mobileKonamiTimer = setTimeout(function() { mobileKonamiCount = 0; }, 800);
+if (mobileKonamiCount >= 5) {
+mobileKonamiCount = 0;
+toggleMatrixMode();
+}
+});
+
+document.addEventListener('keydown', function(e) {
+konamiIndex = e.code === konamiCode[konamiIndex] ? konamiIndex + 1 : 0;
+if (konamiIndex === konamiCode.length) {
+konamiIndex = 0;
+toggleMatrixMode();
+}
+});
+
+function toggleMatrixMode() {
+matrixMode = !matrixMode;
+document.body.classList.toggle('matrix-mode', matrixMode);
+
+if (matrixMode) {
+for (var i = 0; i < 100; i++) {
+particles.push(new Particle(
+Math.random() * W,
+-10,
+{ vx: 0, vy: 2 + Math.random() * 3, decay: 0.001, size: 2, color: 'rgba(0, 255, 65, ' }
+));
+}
+}
+}
+
+// ──── Spotlight Glow Effect ────
+var spotlightElements = document.querySelectorAll('.spotlight-glow');
+for (var i = 0; i < spotlightElements.length; i++) {
+spotlightElements[i].addEventListener('mousemove', function(e) {
+var rect = this.getBoundingClientRect();
+this.style.setProperty('--spotlight-x', (e.clientX - rect.left) + 'px');
+this.style.setProperty('--spotlight-y', (e.clientY - rect.top) + 'px');
+});
+}
 
 // ──── Ambient Floating Particles ────
 var ambientParticles = [];
@@ -764,217 +915,626 @@ var CATEGORIES = [
   {
     key: 'languages',
     label: '< Languages />',
-    filename: 'brolio.ts',
     hatColors: { main: '#d94040', light: '#e85555', dark: '#a82e2e', accent: '#ff7070' },
-    snippet: [
-      { text: '// who is this guy?\n', cls: 'cm' },
-      { text: 'const ', cls: 'kw' },
-      { text: 'dev', cls: 'fn' },
-      { text: ' = {\n', cls: 'punc' },
-      { text: '  name', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: '"Mariano"', cls: 'str' },
-      { text: ',\n', cls: 'punc' },
-      { text: '  role', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: '"full-stack engineer"', cls: 'str' },
-      { text: ',\n', cls: 'punc' },
-      { text: '  since', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: "'06", cls: 'str' },
-      { text: ',\n', cls: 'punc' },
-      { text: '  available', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: 'false', cls: 'kw' },
-      { text: '\n};', cls: 'punc' }
+    filenames: ['brolio.ts', 'brolio.js', 'brolio.js', 'brolio.php'],
+    snippets: [
+      [
+        { text: '// who dis? 🤔\n', cls: 'cm' },
+        { text: 'const ', cls: 'kw' },
+        { text: 'dev', cls: 'fn' },
+        { text: ': ', cls: 'punc' },
+        { text: 'Developer', cls: 'type' },
+        { text: ' = {\n', cls: 'punc' },
+        { text: '  name', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"Mariano"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  role', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"full-stack engineer"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  coffee', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'Infinity', cls: 'kw' },
+        { text: ',  // the real fuel\n', cls: 'cm' },
+        { text: '  available', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'false', cls: 'kw' },
+        { text: '\n};', cls: 'punc' }
+      ],
+      [
+        { text: '// who dis? 🤔\n', cls: 'cm' },
+        { text: 'const ', cls: 'kw' },
+        { text: 'dev', cls: 'fn' },
+        { text: ' = {\n', cls: 'punc' },
+        { text: '  name', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"Mariano"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  role', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"full-stack engineer"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  coffee', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'Infinity', cls: 'kw' },
+        { text: ',  // the real fuel\n', cls: 'cm' },
+        { text: '  available', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'false', cls: 'kw' },
+        { text: '\n};', cls: 'punc' }
+      ],
+      [
+        { text: '// who dis? 🤔\n', cls: 'cm' },
+        { text: 'module.', cls: 'prop' },
+        { text: 'exports', cls: 'kw' },
+        { text: ' = {\n', cls: 'punc' },
+        { text: '  name', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"Mariano"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  role', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"full-stack engineer"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  coffee', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'Infinity', cls: 'kw' },
+        { text: ',  // the real fuel\n', cls: 'cm' },
+        { text: '  available', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'false', cls: 'kw' },
+        { text: '\n};', cls: 'punc' }
+      ],
+      [
+        { text: '// who dis? 🤔\n', cls: 'cm' },
+        { text: '$', cls: 'punc' },
+        { text: 'dev', cls: 'fn' },
+        { text: ' = [\n', cls: 'punc' },
+        { text: '  ', cls: 'punc' },
+        { text: "'name'", cls: 'str' },
+        { text: ' => ', cls: 'punc' },
+        { text: '"Mariano"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  ', cls: 'punc' },
+        { text: "'role'", cls: 'str' },
+        { text: ' => ', cls: 'punc' },
+        { text: '"full-stack engineer"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  ', cls: 'punc' },
+        { text: "'coffee'", cls: 'str' },
+        { text: ' => ', cls: 'punc' },
+        { text: 'INF', cls: 'kw' },
+        { text: ',  // the real fuel\n', cls: 'cm' },
+        { text: '  ', cls: 'punc' },
+        { text: "'available'", cls: 'str' },
+        { text: ' => ', cls: 'punc' },
+        { text: 'false', cls: 'kw' },
+        { text: '\n];', cls: 'punc' }
+      ]
     ]
   },
   {
     key: 'frontend',
     label: '< Frontend />',
-    filename: 'App.tsx',
     hatColors: { main: '#2a9fd6', light: '#61dafb', dark: '#1a6e99', accent: '#88e8ff' },
-    snippet: [
-      { text: 'function ', cls: 'kw' },
-      { text: 'Portfolio', cls: 'fn' },
-      { text: '() {\n', cls: 'punc' },
-      { text: '  return (\n', cls: 'kw' },
-      { text: '    <', cls: 'punc' },
-      { text: 'Card', cls: 'fn' },
-      { text: ' ', cls: 'type' },
-      { text: 'variant', cls: 'prop' },
-      { text: '=', cls: 'punc' },
-      { text: '"glow"', cls: 'str' },
-      { text: '>\n', cls: 'punc' },
-      { text: '      <', cls: 'punc' },
-      { text: 'h1', cls: 'fn' },
-      { text: '>', cls: 'punc' },
-      { text: 'brolio.dev', cls: 'type' },
-      { text: '</', cls: 'punc' },
-      { text: 'h1', cls: 'fn' },
-      { text: '>\n', cls: 'punc' },
-      { text: '      <', cls: 'punc' },
-      { text: 'Status ', cls: 'fn' },
-      { text: 'online', cls: 'prop' },
-      { text: '={', cls: 'punc' },
-      { text: 'false', cls: 'kw' },
-      { text: '} />\n', cls: 'punc' },
-      { text: '    </', cls: 'punc' },
-      { text: 'Card', cls: 'fn' },
-      { text: '>\n', cls: 'punc' },
-      { text: '  );\n}', cls: 'punc' }
+    filenames: ['App.tsx', 'Mobile.tsx', 'page.tsx', 'styles.css'],
+    snippets: [
+      [
+        { text: '// pixel perfect, they said\n', cls: 'cm' },
+        { text: 'function ', cls: 'kw' },
+        { text: 'Portfolio', cls: 'fn' },
+        { text: '() {\n', cls: 'punc' },
+        { text: '  return (\n', cls: 'kw' },
+        { text: '    <', cls: 'punc' },
+        { text: 'Card', cls: 'fn' },
+        { text: ' ', cls: 'type' },
+        { text: 'variant', cls: 'prop' },
+        { text: '=', cls: 'punc' },
+        { text: '"glow"', cls: 'str' },
+        { text: '>\n', cls: 'punc' },
+        { text: '      <', cls: 'punc' },
+        { text: 'h1', cls: 'fn' },
+        { text: '>', cls: 'punc' },
+        { text: 'brolio.dev', cls: 'type' },
+        { text: '</', cls: 'punc' },
+        { text: 'h1', cls: 'fn' },
+        { text: '>\n', cls: 'punc' },
+        { text: '    </', cls: 'punc' },
+        { text: 'Card', cls: 'fn' },
+        { text: '>\n', cls: 'punc' },
+        { text: '  );\n}', cls: 'punc' }
+      ],
+      [
+        { text: '// pixel perfect, they said\n', cls: 'cm' },
+        { text: 'const ', cls: 'kw' },
+        { text: 'MobileApp', cls: 'fn' },
+        { text: ': ', cls: 'punc' },
+        { text: 'FC', cls: 'type' },
+        { text: ' = () => (\n', cls: 'punc' },
+        { text: '  <', cls: 'punc' },
+        { text: 'View', cls: 'fn' },
+        { text: ' ', cls: 'type' },
+        { text: 'style', cls: 'prop' },
+        { text: '=', cls: 'punc' },
+        { text: '{styles.container}', cls: 'str' },
+        { text: '>\n', cls: 'punc' },
+        { text: '    <', cls: 'punc' },
+        { text: 'Text', cls: 'fn' },
+        { text: '>', cls: 'punc' },
+        { text: 'brolio.dev', cls: 'type' },
+        { text: '</', cls: 'punc' },
+        { text: 'Text', cls: 'fn' },
+        { text: '>\n', cls: 'punc' },
+        { text: '  </', cls: 'punc' },
+        { text: 'View', cls: 'fn' },
+        { text: '>\n);', cls: 'punc' }
+      ],
+      [
+        { text: '// pixel perfect, they said\n', cls: 'cm' },
+        { text: 'export default ', cls: 'kw' },
+        { text: 'function ', cls: 'kw' },
+        { text: 'Page', cls: 'fn' },
+        { text: '() {\n', cls: 'punc' },
+        { text: '  const [', cls: 'kw' },
+        { text: 'dev', cls: 'fn' },
+        { text: '] = ', cls: 'punc' },
+        { text: 'useState', cls: 'fn' },
+        { text: '("brolio");\n', cls: 'punc' },
+        { text: '  return <', cls: 'kw' },
+        { text: 'main', cls: 'fn' },
+        { text: '>\n', cls: 'punc' },
+        { text: '    <', cls: 'punc' },
+        { text: 'h1', cls: 'fn' },
+        { text: '>{dev}.dev</', cls: 'punc' },
+        { text: 'h1', cls: 'fn' },
+        { text: '>\n', cls: 'punc' },
+        { text: '  </', cls: 'punc' },
+        { text: 'main', cls: 'fn' },
+        { text: '>;\n}', cls: 'punc' }
+      ],
+      [
+        { text: '/* pixel perfect, they said */\n', cls: 'cm' },
+        { text: '.portfolio', cls: 'fn' },
+        { text: ' {\n', cls: 'punc' },
+        { text: '  display', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'flex', cls: 'kw' },
+        { text: ';\n', cls: 'punc' },
+        { text: '  align-items', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'center', cls: 'kw' },
+        { text: ';\n', cls: 'punc' },
+        { text: '  gap', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '1rem', cls: 'str' },
+        { text: ';\n', cls: 'punc' },
+        { text: '  background', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '#0a0a0f', cls: 'str' },
+        { text: ';\n', cls: 'punc' },
+        { text: '  color', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '#64ffda', cls: 'str' },
+        { text: ';\n}', cls: 'punc' }
+      ]
     ]
   },
   {
     key: 'database',
     label: '< Database />',
-    filename: 'schema.sql',
     hatColors: { main: '#d4a017', light: '#ffd633', dark: '#a07b0e', accent: '#ffe066' },
-    snippet: [
-      { text: 'CREATE TABLE ', cls: 'kw' },
-      { text: 'developers', cls: 'fn' },
-      { text: ' (\n', cls: 'punc' },
-      { text: '  id    ', cls: 'prop' },
-      { text: 'SERIAL PRIMARY KEY', cls: 'kw' },
-      { text: ',\n', cls: 'punc' },
-      { text: '  name  ', cls: 'prop' },
-      { text: 'VARCHAR', cls: 'kw' },
-      { text: '(', cls: 'punc' },
-      { text: '64', cls: 'num' },
-      { text: '),\n', cls: 'punc' },
-      { text: '  stack ', cls: 'prop' },
-      { text: 'TEXT', cls: 'kw' },
-      { text: '[]\n);\n\n', cls: 'punc' },
-      { text: 'SELECT ', cls: 'kw' },
-      { text: '* ', cls: 'type' },
-      { text: 'FROM ', cls: 'kw' },
-      { text: 'developers\n', cls: 'fn' },
-      { text: 'WHERE ', cls: 'kw' },
-      { text: 'name ', cls: 'prop' },
-      { text: '= ', cls: 'punc' },
-      { text: "'Mariano'", cls: 'str' },
-      { text: ';', cls: 'punc' }
+    filenames: ['schema.pg.sql', 'schema.mssql', 'schema.sqlite', 'redis.lua'],
+    snippets: [
+      [
+        { text: 'CREATE TABLE ', cls: 'kw' },
+        { text: 'developers', cls: 'fn' },
+        { text: ' (\n', cls: 'punc' },
+        { text: '  id    ', cls: 'prop' },
+        { text: 'SERIAL PRIMARY KEY', cls: 'kw' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  name  ', cls: 'prop' },
+        { text: 'VARCHAR', cls: 'kw' },
+        { text: '(', cls: 'punc' },
+        { text: '64', cls: 'num' },
+        { text: '),\n', cls: 'punc' },
+        { text: '  stack ', cls: 'prop' },
+        { text: 'TEXT', cls: 'kw' },
+        { text: '[]\n);\n', cls: 'punc' },
+        { text: '-- no SQL injection here, I promise', cls: 'cm' }
+      ],
+      [
+        { text: 'CREATE TABLE ', cls: 'kw' },
+        { text: 'developers', cls: 'fn' },
+        { text: ' (\n', cls: 'punc' },
+        { text: '  id    ', cls: 'prop' },
+        { text: 'INT IDENTITY', cls: 'kw' },
+        { text: '(', cls: 'punc' },
+        { text: '1,1', cls: 'num' },
+        { text: ') PRIMARY KEY', cls: 'kw' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  name  ', cls: 'prop' },
+        { text: 'NVARCHAR', cls: 'kw' },
+        { text: '(', cls: 'punc' },
+        { text: '64', cls: 'num' },
+        { text: '),\n', cls: 'punc' },
+        { text: '  stack ', cls: 'prop' },
+        { text: 'NVARCHAR', cls: 'kw' },
+        { text: '(', cls: 'punc' },
+        { text: 'MAX', cls: 'kw' },
+        { text: ')\n);\n', cls: 'punc' },
+        { text: '-- no SQL injection here, I promise', cls: 'cm' }
+      ],
+      [
+        { text: 'CREATE TABLE ', cls: 'kw' },
+        { text: 'developers', cls: 'fn' },
+        { text: ' (\n', cls: 'punc' },
+        { text: '  id    ', cls: 'prop' },
+        { text: 'INTEGER PRIMARY KEY', cls: 'kw' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  name  ', cls: 'prop' },
+        { text: 'TEXT', cls: 'kw' },
+        { text: ' NOT NULL', cls: 'kw' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  stack ', cls: 'prop' },
+        { text: 'TEXT', cls: 'kw' },
+        { text: '\n);\n', cls: 'punc' },
+        { text: 'INSERT INTO ', cls: 'kw' },
+        { text: 'developers ', cls: 'fn' },
+        { text: 'VALUES ', cls: 'kw' },
+        { text: '(1, "brolio");\n', cls: 'punc' },
+        { text: '-- no SQL injection here, I promise', cls: 'cm' }
+      ],
+      [
+        { text: '-- no SQL injection here, I promise\n', cls: 'cm' },
+        { text: 'SET ', cls: 'kw' },
+        { text: 'dev:name ', cls: 'prop' },
+        { text: '"Mariano"', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: 'SET ', cls: 'kw' },
+        { text: 'dev:role ', cls: 'prop' },
+        { text: '"full-stack"', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: 'SET ', cls: 'kw' },
+        { text: 'dev:stack ', cls: 'prop' },
+        { text: '"node,react,aws"', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: 'EXPIRE ', cls: 'kw' },
+        { text: 'dev:name ', cls: 'prop' },
+        { text: '3600', cls: 'num' },
+        { text: '\n', cls: 'punc' },
+        { text: 'GET ', cls: 'kw' },
+        { text: 'dev:name', cls: 'fn' }
+      ]
     ]
   },
   {
     key: 'cloud',
     label: '< Cloud />',
-    filename: 'infra.yml',
     hatColors: { main: '#7c5cfc', light: '#a78bfd', dark: '#5a3cc4', accent: '#c4b5fd' },
-    snippet: [
-      { text: '# brolio.dev infrastructure\n', cls: 'cm' },
-      { text: 'service', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: 'brolio-api\n', cls: 'str' },
-      { text: 'provider', cls: 'prop' },
-      { text: ':\n', cls: 'punc' },
-      { text: '  name', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: 'aws\n', cls: 'str' },
-      { text: '  runtime', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: 'nodejs20.x\n', cls: 'str' },
-      { text: '  region', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: 'us-east-1\n', cls: 'str' },
-      { text: '  memory', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: '512', cls: 'num' },
-      { text: '\n', cls: 'punc' },
-      { text: '  stage', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: 'production', cls: 'str' }
+    filenames: ['serverless.yml', 'azure.json', 'cfn.yaml', 'main.tf'],
+    snippets: [
+      [
+        { text: '# brolio.dev infrastructure\n', cls: 'cm' },
+        { text: 'service', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'brolio-api\n', cls: 'str' },
+        { text: 'provider', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '  name', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'aws\n', cls: 'str' },
+        { text: '  runtime', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'nodejs20.x\n', cls: 'str' },
+        { text: '  region', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'us-east-1\n', cls: 'str' },
+        { text: '# TODO: world domination', cls: 'cm' }
+      ],
+      [
+        { text: '{\n', cls: 'punc' },
+        { text: '  "$schema"', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"azure-deploy"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  "resources"', cls: 'prop' },
+        { text: ': [\n', cls: 'punc' },
+        { text: '    { "type"', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"WebApp"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '      "name"', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"brolio-dev"', cls: 'str' },
+        { text: ' }\n', cls: 'punc' },
+        { text: '  ]\n', cls: 'punc' },
+        { text: '}  # TODO: world domination', cls: 'cm' }
+      ],
+      [
+        { text: 'AWSTemplateFormatVersion', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"2010-09-09"\n', cls: 'str' },
+        { text: 'Resources', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '  BrolioFunction', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '    Type', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'AWS::Lambda::Function\n', cls: 'str' },
+        { text: '    Properties', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '      Runtime', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'nodejs20.x\n', cls: 'str' },
+        { text: '# TODO: world domination', cls: 'cm' }
+      ],
+      [
+        { text: '# TODO: world domination\n', cls: 'cm' },
+        { text: 'resource', cls: 'kw' },
+        { text: ' "aws_lambda_function" ', cls: 'str' },
+        { text: '"brolio"', cls: 'fn' },
+        { text: ' {\n', cls: 'punc' },
+        { text: '  function_name ', cls: 'prop' },
+        { text: '= ', cls: 'punc' },
+        { text: '"brolio-api"', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: '  runtime       ', cls: 'prop' },
+        { text: '= ', cls: 'punc' },
+        { text: '"nodejs20.x"', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: '  handler       ', cls: 'prop' },
+        { text: '= ', cls: 'punc' },
+        { text: '"index.handler"', cls: 'str' },
+        { text: '\n}', cls: 'punc' }
+      ]
     ]
   },
   {
     key: 'devops',
     label: '< DevOps />',
-    filename: 'Dockerfile',
     hatColors: { main: '#e67e22', light: '#f5a623', dark: '#b35c0a', accent: '#ffc966' },
-    snippet: [
-      { text: 'FROM ', cls: 'kw' },
-      { text: 'node:20-alpine\n', cls: 'str' },
-      { text: 'WORKDIR ', cls: 'kw' },
-      { text: '/app/brolio\n\n', cls: 'str' },
-      { text: '# ship it\n', cls: 'cm' },
-      { text: 'COPY ', cls: 'kw' },
-      { text: 'package*.json ', cls: 'type' },
-      { text: '.\n', cls: 'punc' },
-      { text: 'RUN ', cls: 'kw' },
-      { text: 'npm ci --production\n', cls: 'type' },
-      { text: 'COPY ', cls: 'kw' },
-      { text: '. .\n\n', cls: 'punc' },
-      { text: 'EXPOSE ', cls: 'kw' },
-      { text: '3000', cls: 'num' },
-      { text: '\n', cls: 'punc' },
-      { text: 'CMD ', cls: 'kw' },
-      { text: '["node", "server.js"]', cls: 'str' }
+    filenames: ['Dockerfile', 'ci.yml', 'nginx.conf', 'deploy.sh'],
+    snippets: [
+      [
+        { text: 'FROM ', cls: 'kw' },
+        { text: 'node:20-alpine\n', cls: 'str' },
+        { text: 'WORKDIR ', cls: 'kw' },
+        { text: '/app/brolio\n', cls: 'str' },
+        { text: '# it works on my machine\n', cls: 'cm' },
+        { text: 'COPY ', cls: 'kw' },
+        { text: 'package*.json ', cls: 'type' },
+        { text: '.\n', cls: 'punc' },
+        { text: 'RUN ', cls: 'kw' },
+        { text: 'npm ci --production\n', cls: 'type' },
+        { text: 'COPY ', cls: 'kw' },
+        { text: '. .\n', cls: 'punc' },
+        { text: 'EXPOSE ', cls: 'kw' },
+        { text: '3000', cls: 'num' },
+        { text: '\n', cls: 'punc' },
+        { text: 'CMD ', cls: 'kw' },
+        { text: '["node", "server.js"]', cls: 'str' }
+      ],
+      [
+        { text: '# it works on my machine\n', cls: 'cm' },
+        { text: 'name', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'deploy-brolio\n', cls: 'str' },
+        { text: 'on', cls: 'prop' },
+        { text: ': { ', cls: 'punc' },
+        { text: 'push', cls: 'kw' },
+        { text: ': [main] }\n', cls: 'punc' },
+        { text: 'jobs', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '  build', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '    runs-on', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'ubuntu-latest\n', cls: 'str' },
+        { text: '    steps', cls: 'prop' },
+        { text: ': [{', cls: 'punc' },
+        { text: 'uses', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'actions/checkout@v4', cls: 'str' },
+        { text: '}]', cls: 'punc' }
+      ],
+      [
+        { text: 'server {\n', cls: 'kw' },
+        { text: '  listen ', cls: 'prop' },
+        { text: '80', cls: 'num' },
+        { text: ';\n', cls: 'punc' },
+        { text: '  # it works on my machine\n', cls: 'cm' },
+        { text: '  server_name ', cls: 'prop' },
+        { text: 'brolio.dev;\n', cls: 'str' },
+        { text: '  location ', cls: 'prop' },
+        { text: '/ {\n', cls: 'str' },
+        { text: '    proxy_pass ', cls: 'prop' },
+        { text: 'http://localhost:3000', cls: 'str' },
+        { text: ';\n', cls: 'punc' },
+        { text: '  }\n}', cls: 'punc' }
+      ],
+      [
+        { text: '#!/bin/bash\n', cls: 'cm' },
+        { text: '# it works on my machine\n', cls: 'cm' },
+        { text: 'set ', cls: 'kw' },
+        { text: '-e\n\n', cls: 'str' },
+        { text: 'echo ', cls: 'kw' },
+        { text: '"Deploying brolio.dev..."', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: 'docker ', cls: 'fn' },
+        { text: 'build -t brolio .\n', cls: 'str' },
+        { text: 'docker ', cls: 'fn' },
+        { text: 'run -d -p 3000:3000 brolio\n', cls: 'str' },
+        { text: 'echo ', cls: 'kw' },
+        { text: '"Ship it! 🚀"', cls: 'str' }
+      ]
     ]
   },
   {
     key: 'ai',
     label: '< AI />',
-    filename: 'agent.json',
     hatColors: { main: '#22c55e', light: '#4ade80', dark: '#15803d', accent: '#a3ffca' },
-    snippet: [
-      { text: '{\n', cls: 'punc' },
-      { text: '  "name"', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: '"brolio-agent"', cls: 'str' },
-      { text: ',\n', cls: 'punc' },
-      { text: '  "model"', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: '"claude-opus-4"', cls: 'str' },
-      { text: ',\n', cls: 'punc' },
-      { text: '  "tools"', cls: 'prop' },
-      { text: ': [', cls: 'punc' },
-      { text: '"mcp"', cls: 'str' },
-      { text: ', ', cls: 'punc' },
-      { text: '"code"', cls: 'str' },
-      { text: ', ', cls: 'punc' },
-      { text: '"deploy"', cls: 'str' },
-      { text: '],\n', cls: 'punc' },
-      { text: '  "personality"', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: '"ships fast"', cls: 'str' },
-      { text: ',\n', cls: 'punc' },
-      { text: '  "caffeinated"', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: 'true', cls: 'kw' },
-      { text: '\n}', cls: 'punc' }
+    filenames: ['claude.md', 'mcp.json', 'agent.yaml', 'chain.ts'],
+    snippets: [
+      [
+        { text: '// trust me bro, AI-generated\n', cls: 'cm' },
+        { text: 'You are brolio-agent.\n', cls: 'str' },
+        { text: 'Mission: Ship fast, break nothing.\n', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: 'Capabilities', cls: 'kw' },
+        { text: ':\n', cls: 'punc' },
+        { text: '- Write clean code\n', cls: 'str' },
+        { text: '- Deploy to production\n', cls: 'str' },
+        { text: '- Blame the intern\n', cls: 'str' },
+        { text: '\n', cls: 'punc' },
+        { text: 'Coffee level', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'CRITICAL', cls: 'kw' }
+      ],
+      [
+        { text: '{\n', cls: 'punc' },
+        { text: '  // trust me bro\n', cls: 'cm' },
+        { text: '  "mcpServers"', cls: 'prop' },
+        { text: ': {\n', cls: 'punc' },
+        { text: '    "brolio"', cls: 'prop' },
+        { text: ': {\n', cls: 'punc' },
+        { text: '      "command"', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"node"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '      "args"', cls: 'prop' },
+        { text: ': [', cls: 'punc' },
+        { text: '"mcp-server.js"', cls: 'str' },
+        { text: ']\n', cls: 'punc' },
+        { text: '    }\n', cls: 'punc' },
+        { text: '  }\n}', cls: 'punc' }
+      ],
+      [
+        { text: '# AI-generated, probably correct\n', cls: 'cm' },
+        { text: 'agent', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '  name', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'brolio-bot\n', cls: 'str' },
+        { text: '  model', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'claude-opus-4\n', cls: 'str' },
+        { text: '  tools', cls: 'prop' },
+        { text: ':\n', cls: 'punc' },
+        { text: '    - code_interpreter\n', cls: 'str' },
+        { text: '    - web_search\n', cls: 'str' },
+        { text: '  personality', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"caffeinated"', cls: 'str' }
+      ],
+      [
+        { text: '// AI-generated, probably correct\n', cls: 'cm' },
+        { text: 'const ', cls: 'kw' },
+        { text: 'chain ', cls: 'fn' },
+        { text: '= ', cls: 'punc' },
+        { text: 'new ', cls: 'kw' },
+        { text: 'LLMChain', cls: 'fn' },
+        { text: '({\n', cls: 'punc' },
+        { text: '  llm', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'new ', cls: 'kw' },
+        { text: 'Claude', cls: 'fn' },
+        { text: '(),\n', cls: 'punc' },
+        { text: '  prompt', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"Ship it!"', cls: 'str' },
+        { text: ',\n', cls: 'punc' },
+        { text: '  memory', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: 'new ', cls: 'kw' },
+        { text: 'BufferMemory', cls: 'fn' },
+        { text: '()\n});', cls: 'punc' }
+      ]
     ]
   },
   {
     key: 'api',
     label: '< API />',
-    filename: 'server.ts',
     hatColors: { main: '#c0c0c0', light: '#e0e0e0', dark: '#888888', accent: '#ffffff' },
-    snippet: [
-      { text: 'import ', cls: 'kw' },
-      { text: 'express ', cls: 'fn' },
-      { text: 'from ', cls: 'kw' },
-      { text: "'express'", cls: 'str' },
-      { text: ';\n\n', cls: 'punc' },
-      { text: 'const ', cls: 'kw' },
-      { text: 'app ', cls: 'fn' },
-      { text: '= ', cls: 'punc' },
-      { text: 'express', cls: 'fn' },
-      { text: '();\n\n', cls: 'punc' },
-      { text: 'app.', cls: 'type' },
-      { text: 'get', cls: 'fn' },
-      { text: '(', cls: 'punc' },
-      { text: '"/api/brolio"', cls: 'str' },
-      { text: ', (', cls: 'punc' },
-      { text: 'req, res', cls: 'prop' },
-      { text: ') => {\n', cls: 'punc' },
-      { text: '  res.', cls: 'type' },
-      { text: 'json', cls: 'fn' },
-      { text: '({ ', cls: 'punc' },
-      { text: 'status', cls: 'prop' },
-      { text: ': ', cls: 'punc' },
-      { text: '"shipping"', cls: 'str' },
-      { text: ' });\n', cls: 'punc' },
-      { text: '});', cls: 'punc' }
+    filenames: ['routes.ts', 'middleware.ts', 'client.ts', 'errors.ts'],
+    snippets: [
+      [
+        { text: '// it works on my machine\n', cls: 'cm' },
+        { text: 'app.', cls: 'type' },
+        { text: 'get', cls: 'fn' },
+        { text: '(', cls: 'punc' },
+        { text: '"/api/brolio"', cls: 'str' },
+        { text: ', (', cls: 'punc' },
+        { text: 'req, res', cls: 'prop' },
+        { text: ') => {\n', cls: 'punc' },
+        { text: '  res.', cls: 'type' },
+        { text: 'json', cls: 'fn' },
+        { text: '({ ', cls: 'punc' },
+        { text: 'status', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"shipping"', cls: 'str' },
+        { text: ' });\n', cls: 'punc' },
+        { text: '});', cls: 'punc' }
+      ],
+      [
+        { text: '// TODO: add error handling\n', cls: 'cm' },
+        { text: 'export ', cls: 'kw' },
+        { text: 'function ', cls: 'kw' },
+        { text: 'logger', cls: 'fn' },
+        { text: '(', cls: 'punc' },
+        { text: 'req, res, next', cls: 'prop' },
+        { text: ') {\n', cls: 'punc' },
+        { text: '  console.', cls: 'type' },
+        { text: 'log', cls: 'fn' },
+        { text: '(', cls: 'punc' },
+        { text: '`${req.method} ${req.path}`', cls: 'str' },
+        { text: ');\n', cls: 'punc' },
+        { text: '  next', cls: 'fn' },
+        { text: '();\n}', cls: 'punc' }
+      ],
+      [
+        { text: '// it works on my machine\n', cls: 'cm' },
+        { text: 'const ', cls: 'kw' },
+        { text: 'res ', cls: 'fn' },
+        { text: '= await ', cls: 'kw' },
+        { text: 'fetch', cls: 'fn' },
+        { text: '(', cls: 'punc' },
+        { text: '"https://brolio.dev/api"', cls: 'str' },
+        { text: ');\n', cls: 'punc' },
+        { text: 'const ', cls: 'kw' },
+        { text: 'data ', cls: 'fn' },
+        { text: '= await res.', cls: 'kw' },
+        { text: 'json', cls: 'fn' },
+        { text: '();\n', cls: 'punc' },
+        { text: 'return data', cls: 'kw' },
+        { text: '.', cls: 'punc' },
+        { text: 'brolio', cls: 'fn' },
+        { text: ';', cls: 'punc' }
+      ],
+      [
+        { text: '// TODO: add error handling\n', cls: 'cm' },
+        { text: 'app.', cls: 'type' },
+        { text: 'use', cls: 'fn' },
+        { text: '((', cls: 'punc' },
+        { text: 'err, req, res, next', cls: 'prop' },
+        { text: ') => {\n', cls: 'punc' },
+        { text: '  console.', cls: 'type' },
+        { text: 'error', cls: 'fn' },
+        { text: '(', cls: 'punc' },
+        { text: 'err', cls: 'prop' },
+        { text: ');\n', cls: 'punc' },
+        { text: '  res.', cls: 'type' },
+        { text: 'status', cls: 'fn' },
+        { text: '(', cls: 'punc' },
+        { text: '500', cls: 'num' },
+        { text: ').', cls: 'punc' },
+        { text: 'json', cls: 'fn' },
+        { text: '({\n', cls: 'punc' },
+        { text: '    error', cls: 'prop' },
+        { text: ': ', cls: 'punc' },
+        { text: '"something broke"', cls: 'str' },
+        { text: '\n  });\n});', cls: 'punc' }
+      ]
     ]
   }
 ];
@@ -1132,9 +1692,44 @@ function drawHat(categoryIndex) {
 }
 
 function renderAvatar(categoryIndex) {
-  avatarCtx.clearRect(0, 0, avatarCanvas.width, avatarCanvas.height);
-  drawBaseCharacter();
-  drawHat(categoryIndex);
+avatarCtx.clearRect(0, 0, avatarCanvas.width, avatarCanvas.height);
+drawBaseCharacter();
+drawHat(categoryIndex);
+}
+
+// ──── Avatar Click Secret ────
+var avatarClickCount = 0;
+var avatarClickTimer = null;
+var secretHatRevealed = false;
+
+avatarCanvas.addEventListener('click', function() {
+avatarClickCount++;
+clearTimeout(avatarClickTimer);
+avatarClickTimer = setTimeout(function() {
+avatarClickCount = 0;
+}, 600);
+
+if (avatarClickCount >= 5 && !secretHatRevealed) {
+avatarClickCount = 0;
+secretHatRevealed = true;
+revealSecretHat();
+}
+});
+
+function revealSecretHat() {
+var rect = avatarCanvas.getBoundingClientRect();
+var cx = rect.left + rect.width / 2;
+var cy = rect.top + rect.height / 3;
+
+for (var i = 0; i < 30; i++) {
+burstParticles.push(new BurstParticle(cx, cy));
+}
+
+var msg = document.createElement('div');
+msg.textContent = '🎉 You found a secret!';
+msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5rem;color:var(--accent);z-index:9999;animation:fadeUp 1s ease forwards;pointer-events:none;font-family:JetBrains Mono,monospace;';
+document.body.appendChild(msg);
+setTimeout(function() { msg.remove(); }, 1500);
 }
 
 // ──── Hat Swap Particle System ────
@@ -1296,49 +1891,83 @@ var codeTypeTimer = null;
 var codeFullHTML = '';
 
 function typeCode(snippetParts) {
-  if (codeTypeTimer) clearInterval(codeTypeTimer);
+if (codeTypeTimer) {
+clearTimeout(codeTypeTimer);
+codeTypeTimer = null;
+}
 
-  var segments = [];
-  for (var p = 0; p < snippetParts.length; p++) {
-    var part = snippetParts[p];
-    for (var c = 0; c < part.text.length; c++) {
-      segments.push({ char: part.text[c], cls: part.cls });
-    }
-  }
+var segments = [];
+for (var p = 0; p < snippetParts.length; p++) {
+var part = snippetParts[p];
+for (var c = 0; c < part.text.length; c++) {
+segments.push({ char: part.text[c], cls: part.cls });
+}
+}
 
-  var built = '';
-  var segIndex = 0;
-  var currentSpanCls = null;
+var built = '';
+var segIndex = 0;
+var currentSpanCls = null;
+var typoMode = false;
 
-  codeContentEl.innerHTML = '<span class="cursor-blink"></span>';
+codeContentEl.innerHTML = '<span class="cursor-blink"></span>';
 
-  codeTypeTimer = setInterval(function() {
-    if (segIndex >= segments.length) {
-      clearInterval(codeTypeTimer);
-      codeTypeTimer = null;
-      codeContentEl.innerHTML = built + '<span class="cursor-blink"></span>';
-      return;
-    }
+function typeNext() {
+if (segIndex >= segments.length) {
+codeTypeTimer = null;
+codeContentEl.innerHTML = built + '<span class="cursor-blink"></span>';
+return;
+}
 
-    var seg = segments[segIndex];
-    var ch = seg.char;
+var seg = segments[segIndex];
+var ch = seg.char;
+var delay = 12 + Math.random() * 33;
 
-    if (ch === '<') ch = '&lt;';
-    else if (ch === '>') ch = '&gt;';
-    else if (ch === '&') ch = '&amp;';
+var chDisplay = ch;
+if (ch === '<') chDisplay = '&lt;';
+else if (ch === '>') chDisplay = '&gt;';
+else if (ch === '&') chDisplay = '&amp;';
 
-    if (seg.cls !== currentSpanCls) {
-      if (currentSpanCls !== null) built += '</span>';
-      built += '<span class="' + seg.cls + '">';
-      currentSpanCls = seg.cls;
-    }
-    built += ch;
+if (typoMode) {
+built = built.slice(0, -1);
+typoMode = false;
+codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '<span class="cursor-blink"></span>';
+codeTypeTimer = setTimeout(typeNext, 80 + Math.random() * 60);
+return;
+}
 
-    segIndex++;
-    codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '<span class="cursor-blink"></span>';
-    var codeBody = codeContentEl.closest('.code-body');
-    codeBody.scrollTop = codeBody.scrollHeight;
-  }, 18);
+var isTypableChar = /[a-zA-Z0-9]/.test(ch);
+if (isTypableChar && Math.random() < 0.05) {
+var typoPool = 'abcdefghijklmnopqrstuvwxyz';
+var typoChar = typoPool[Math.floor(Math.random() * typoPool.length)];
+if (seg.cls !== currentSpanCls) {
+if (currentSpanCls !== null) built += '</span>';
+built += '<span class="' + seg.cls + '">';
+currentSpanCls = seg.cls;
+}
+built += typoChar;
+codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '<span class="cursor-blink"></span>';
+typoMode = true;
+codeTypeTimer = setTimeout(typeNext, 150 + Math.random() * 100);
+return;
+}
+
+if (seg.cls !== currentSpanCls) {
+if (currentSpanCls !== null) built += '</span>';
+built += '<span class="' + seg.cls + '">';
+currentSpanCls = seg.cls;
+}
+built += chDisplay;
+
+segIndex++;
+codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '<span class="cursor-blink"></span>';
+
+var codeBody = codeContentEl.closest('.code-body');
+codeBody.scrollTop = codeBody.scrollHeight;
+
+codeTypeTimer = setTimeout(typeNext, delay);
+}
+
+typeNext();
 }
 
 // ──── Fire burst at avatar position ────
@@ -1389,8 +2018,15 @@ function switchCategory(newIndex) {
   var cat = CATEGORIES[newIndex];
   updateActiveTags(cat.key);
   typeLabel(cat.label);
-  codeFilenameEl.textContent = cat.filename;
-  typeCode(cat.snippet);
+
+  if (cat.snippets) {
+    var randIdx = Math.floor(Math.random() * cat.snippets.length);
+    codeFilenameEl.textContent = cat.filenames[randIdx];
+    typeCode(cat.snippets[randIdx]);
+  } else {
+    codeFilenameEl.textContent = cat.filename;
+    typeCode(cat.snippet);
+  }
 }
 
 // ──── Auto-Cycle ────
@@ -1399,7 +2035,7 @@ function resetAutoCycle() {
   autoCycleTimer = setInterval(function() {
     var next = (currentCategory + 1) % CATEGORIES.length;
     switchCategory(next);
-  }, 5000);
+  }, 10000);
 }
 
 // ──── Tag Click Handlers ────
@@ -1427,9 +2063,18 @@ function initLivingAvatar() {
   renderAvatar(0);
   updateActiveTags(CATEGORIES[0].key);
   categoryLabelEl.textContent = CATEGORIES[0].label;
-  codeFilenameEl.textContent = CATEGORIES[0].filename;
 
-  var initialSnippet = CATEGORIES[0].snippet;
+  var cat = CATEGORIES[0];
+  var initialSnippet;
+  if (cat.snippets) {
+    var randIdx = Math.floor(Math.random() * cat.snippets.length);
+    codeFilenameEl.textContent = cat.filenames[randIdx];
+    initialSnippet = cat.snippets[randIdx];
+  } else {
+    codeFilenameEl.textContent = cat.filename;
+    initialSnippet = cat.snippet;
+  }
+
   var html = '';
   for (var p = 0; p < initialSnippet.length; p++) {
     var text = initialSnippet[p].text;

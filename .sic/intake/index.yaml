@@ -1,0 +1,7 @@
+intakes:
+  - folder: 2026-02-26-portfolio-interactivity
+    title: Portfolio Interactivity & Easter Eggs
+    status: promoted
+    created: 2026-02-26
+    has_research: true
+    promoted_to: phases/001-portfolio-interactivity.md
