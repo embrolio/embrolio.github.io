@@ -1722,7 +1722,7 @@ avatarClickTimer = setTimeout(function() {
 avatarClickCount = 0;
 }, 600);
 
-if (avatarClickCount >= 5) {
+if (avatarClickCount >= 2) {
 avatarClickCount = 0;
 showJokeBubble();
 }
@@ -1944,6 +1944,21 @@ var built = '';
 var segIndex = 0;
 var currentSpanCls = null;
 var typoMode = false;
+var burstCount = 0;
+var burstMax = 0;
+var thinkingPause = false;
+
+function getTypingDelay(ch, prevChar) {
+  // Base speed varies by character type (sped up for 10s rotation)
+  if (ch === '\n' || ch === '\r') return 35 + Math.random() * 30;
+  if (ch === ' ' || ch === '\t') return 15 + Math.random() * 20;
+  if (/[;{},()]/.test(ch)) return 30 + Math.random() * 25;
+  if (/[.!?]/.test(ch)) return 50 + Math.random() * 40;
+  if (/[<>'"\/=]/.test(ch)) return 20 + Math.random() * 15;
+
+  // Letters and numbers - fast with variation
+  return 12 + Math.random() * 22;
+}
 
 codeContentEl.innerHTML = '<span class="cursor-blink"></span>';
 
@@ -1956,7 +1971,7 @@ return;
 
 var seg = segments[segIndex];
 var ch = seg.char;
-var delay = 12 + Math.random() * 33;
+var prevChar = segIndex > 0 ? segments[segIndex - 1].char : '';
 
 var chDisplay = ch;
 if (ch === '<') chDisplay = '&lt;';
@@ -1967,13 +1982,24 @@ if (typoMode) {
 built = built.slice(0, -1);
 typoMode = false;
 codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '<span class="cursor-blink"></span>';
-codeTypeTimer = setTimeout(typeNext, 80 + Math.random() * 60);
+codeTypeTimer = setTimeout(typeNext, 60 + Math.random() * 50);
 return;
 }
 
-var isTypableChar = /[a-zA-Z0-9]/.test(ch);
-if (isTypableChar && Math.random() < 0.05) {
-var typoPool = 'abcdefghijklmnopqrstuvwxyz';
+// Human-like typo (slightly more rare, more realistic)
+var isTypableChar = /[a-zA-Z]/.test(ch);
+if (isTypableChar && Math.random() < 0.04) {
+// Pick a typo that's close on the keyboard
+var keyboardNeighbors = {
+  'a': 'asqw', 'b': 'bvngh', 'c': 'cxvdf', 'd': 'dersfcx', 'e': 'erwsd',
+  'f': 'fdrtgvc', 'g': 'gftyhbv', 'h': 'hgyujnb', 'i': 'iuokjl',
+  'j': 'jhuikmn', 'k': 'kjilom', 'l': 'lkop', 'm': 'mnjk',
+  'n': 'nbhjm', 'o': 'oplik', 'p': 'pol', 'q': 'qwas',
+  'r': 'rtedfg', 's': 'swadxz', 't': 'tyrfgh', 'u': 'uiyhj',
+  'v': 'vcfgb', 'w': 'wqase', 'x': 'xzsdc', 'y': 'yutghj',
+  'z': 'zasx'
+};
+var typoPool = keyboardNeighbors[ch.toLowerCase()] || 'abcdefghijklmnopqrstuvwxyz';
 var typoChar = typoPool[Math.floor(Math.random() * typoPool.length)];
 if (seg.cls !== currentSpanCls) {
 if (currentSpanCls !== null) built += '</span>';
@@ -1983,9 +2009,22 @@ currentSpanCls = seg.cls;
 built += typoChar;
 codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '<span class="cursor-blink"></span>';
 typoMode = true;
-codeTypeTimer = setTimeout(typeNext, 150 + Math.random() * 100);
+codeTypeTimer = setTimeout(typeNext, 100 + Math.random() * 80);
 return;
 }
+
+// Burst typing mode - humans type a few chars then pause
+if (burstCount >= burstMax) {
+  burstMax = 3 + Math.floor(Math.random() * 5); // 3-7 chars in a burst (longer bursts)
+  burstCount = 0;
+  // Small chance of "thinking" pause (shorter now)
+  if (Math.random() < 0.06) {
+    thinkingPause = true;
+    codeTypeTimer = setTimeout(function() { thinkingPause = false; typeNext(); }, 100 + Math.random() * 150);
+    return;
+  }
+}
+burstCount++;
 
 if (seg.cls !== currentSpanCls) {
 if (currentSpanCls !== null) built += '</span>';
@@ -1999,6 +2038,19 @@ codeContentEl.innerHTML = built + (currentSpanCls !== null ? '</span>' : '') + '
 
 var codeBody = codeContentEl.closest('.code-body');
 codeBody.scrollTop = codeBody.scrollHeight;
+
+// Calculate delay based on character and context
+var delay = getTypingDelay(ch, prevChar);
+
+// Slight pause after line breaks (like taking a breath)
+if (ch === '\n' && Math.random() < 0.25) {
+  delay += 40 + Math.random() * 50;
+}
+
+// Slight acceleration within bursts
+if (burstCount > 1) {
+  delay *= 0.85;
+}
 
 codeTypeTimer = setTimeout(typeNext, delay);
 }
