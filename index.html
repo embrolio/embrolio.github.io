@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#0a0a0f">
 <meta name="color-scheme" content="dark">
 <title>brolio.dev</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%2364ffda'%3E%7B%7D%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@200;300;400;600&display=swap" rel="stylesheet">
@@ -138,12 +139,14 @@ pointer-events: none;
 
 /* ──── Avatar Canvas ──── */
 #avatar-canvas {
-image-rendering: pixelated;
-image-rendering: crisp-edges;
-width: 128px;
-height: 160px;
-animation: avatarBounce 3s ease-in-out infinite, fadeUp 0.8s ease forwards 0s;
-opacity: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  width: 128px;
+  height: 160px;
+  animation: avatarBounce 3s ease-in-out infinite, fadeUp 0.8s ease forwards 0s;
+  opacity: 0;
+  pointer-events: auto;
+  cursor: none;
 }
 
 @keyframes avatarBounce {
@@ -180,46 +183,7 @@ color: var(--accent);
 text-shadow: 0 0 30px rgba(100, 255, 218, 0.4);
 }
 
-/* ──── Title Glitch ──── */
-.title:hover::before,
-.title:hover::after {
-content: 'brolio.dev';
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-overflow: hidden;
-}
 
-.title:hover::before {
-animation: glitch-1 0.3s infinite;
-color: var(--accent);
-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-}
-
-.title:hover::after {
-animation: glitch-2 0.3s infinite reverse;
-color: var(--accent-secondary);
-clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
-}
-
-@keyframes glitch-1 {
-0% { transform: translate(0); }
-20% { transform: translate(-2px, 1px); }
-40% { transform: translate(1px, -1px); }
-60% { transform: translate(-1px, 0); }
-80% { transform: translate(2px, 1px); }
-100% { transform: translate(0); }
-}
-
-@keyframes glitch-2 {
-0% { transform: translate(0); }
-20% { transform: translate(1px, -1px); }
-40% { transform: translate(-1px, 1px); }
-60% { transform: translate(2px, 0); }
-80% { transform: translate(-2px, -1px); }
-100% { transform: translate(0); }
-}
 
 .subtitle {
 font-family: 'Outfit', sans-serif;
@@ -802,6 +766,8 @@ Math.random() * W,
 ));
 }
 }
+
+renderAvatar(currentCategory);
 }
 
 // ──── Spotlight Glow Effect ────
@@ -845,7 +811,7 @@ AmbientParticle.prototype.draw = function(ctx) {
   ctx.fill();
 };
 
-for (var i = 0; i < 90; i++) {
+for (var i = 0; i < 40; i++) {
   ambientParticles.push(new AmbientParticle());
 }
 
@@ -899,12 +865,11 @@ OrbitParticle.prototype.draw = function(ctx) {
   ctx.fill();
 };
 
-for (var i = 0; i < 20; i++) {
-  orbitParticles.push(new OrbitParticle(i, 20));
+for (var i = 0; i < 5; i++) {
+  orbitParticles.push(new OrbitParticle(i, 5));
 }
 
-// ──── Constellation Lines (connect nearby ambient particles) ────
-var CONSTELLATION_DIST = 120;
+// ──── Constellation Lines removed for V1 optimization ────
 
 // ════════════════════════════════════════════
 // ──── OPTION 1: THE LIVING AVATAR ────
@@ -1661,6 +1626,37 @@ var HAT_API = [
 
 var HATS = [HAT_LANGUAGES, HAT_FRONTEND, HAT_DATABASE, HAT_CLOUD, HAT_DEVOPS, HAT_AI, HAT_API];
 
+// ──── Matrix Mode Sunglasses ────
+var GLASSES = [
+  // Top frame bar (thick)
+  {x:3,y:4,c:'frame'},{x:4,y:4,c:'frame'},{x:5,y:4,c:'frame'},{x:6,y:4,c:'frame'},{x:7,y:4,c:'frame'},
+  {x:8,y:4,c:'frame'},{x:9,y:4,c:'frame'},{x:10,y:4,c:'frame'},{x:11,y:4,c:'frame'},{x:12,y:4,c:'frame'},
+  // Left lens (larger, 4x3)
+  {x:3,y:5,c:'frame'},{x:4,y:5,c:'lens'},{x:5,y:5,c:'lens'},{x:6,y:5,c:'lens'},{x:7,y:5,c:'frame'},
+  {x:3,y:6,c:'frame'},{x:4,y:6,c:'lens'},{x:5,y:6,c:'lens'},{x:6,y:6,c:'lens'},{x:7,y:6,c:'frame'},
+  {x:3,y:7,c:'frame'},{x:4,y:7,c:'lens'},{x:5,y:7,c:'lens'},{x:6,y:7,c:'lens'},{x:7,y:7,c:'frame'},
+  {x:4,y:8,c:'frame'},{x:5,y:8,c:'frame'},{x:6,y:8,c:'frame'},
+  // Bridge
+  {x:7,y:5,c:'frame'},{x:8,y:5,c:'frame'},
+  // Right lens (larger, 4x3)
+  {x:8,y:5,c:'frame'},{x:9,y:5,c:'lens'},{x:10,y:5,c:'lens'},{x:11,y:5,c:'lens'},{x:12,y:5,c:'frame'},
+  {x:8,y:6,c:'frame'},{x:9,y:6,c:'lens'},{x:10,y:6,c:'lens'},{x:11,y:6,c:'lens'},{x:12,y:6,c:'frame'},
+  {x:8,y:7,c:'frame'},{x:9,y:7,c:'lens'},{x:10,y:7,c:'lens'},{x:11,y:7,c:'lens'},{x:12,y:7,c:'frame'},
+  {x:9,y:8,c:'frame'},{x:10,y:8,c:'frame'},{x:11,y:8,c:'frame'},
+  // Side arms / temples
+  {x:2,y:5,c:'frame'},{x:2,y:6,c:'frame'},{x:2,y:7,c:'frame'},
+  {x:13,y:5,c:'frame'},{x:13,y:6,c:'frame'},{x:13,y:7,c:'frame'},
+  // Glare/reflection on lenses (matrix code style)
+  {x:5,y:5,c:'glare'},{x:10,y:5,c:'glare'},
+  {x:4,y:7,c:'glare'},{x:11,y:7,c:'glare'}
+];
+
+var GLASSES_COLORS = {
+  frame: '#00ff41',
+  lens: 'rgba(0, 40, 0, 0.85)',
+  glare: 'rgba(0, 255, 65, 0.6)'
+};
+
 // ──── Avatar Rendering ────
 var avatarCanvas = document.getElementById('avatar-canvas');
 var avatarCtx = avatarCanvas.getContext('2d');
@@ -1691,16 +1687,33 @@ function drawHat(categoryIndex) {
   }
 }
 
+function drawGlasses() {
+  for (var i = 0; i < GLASSES.length; i++) {
+    var p = GLASSES[i];
+    avatarCtx.fillStyle = GLASSES_COLORS[p.c];
+    avatarCtx.fillRect(p.x * PIXEL, (p.y * PIXEL) + AVATAR_OFFSET_Y, PIXEL, PIXEL);
+  }
+}
+
 function renderAvatar(categoryIndex) {
 avatarCtx.clearRect(0, 0, avatarCanvas.width, avatarCanvas.height);
 drawBaseCharacter();
 drawHat(categoryIndex);
+if (matrixMode) {
+  drawGlasses();
+}
 }
 
 // ──── Avatar Click Secret ────
 var avatarClickCount = 0;
 var avatarClickTimer = null;
-var secretHatRevealed = false;
+
+var DEV_JOKES = [
+  "I don't always test my code, but when I do... I do it in production.",
+  "Why do programmers prefer dark mode? Because light attracts bugs.",
+  "A SQL query walks into a bar, walks up to two tables and asks... 'Can I join you?'",
+  "I would tell you a UDP joke, but you might not get it."
+];
 
 avatarCanvas.addEventListener('click', function() {
 avatarClickCount++;
@@ -1709,14 +1722,13 @@ avatarClickTimer = setTimeout(function() {
 avatarClickCount = 0;
 }, 600);
 
-if (avatarClickCount >= 5 && !secretHatRevealed) {
+if (avatarClickCount >= 5) {
 avatarClickCount = 0;
-secretHatRevealed = true;
-revealSecretHat();
+showJokeBubble();
 }
 });
 
-function revealSecretHat() {
+function showJokeBubble() {
 var rect = avatarCanvas.getBoundingClientRect();
 var cx = rect.left + rect.width / 2;
 var cy = rect.top + rect.height / 3;
@@ -1725,11 +1737,31 @@ for (var i = 0; i < 30; i++) {
 burstParticles.push(new BurstParticle(cx, cy));
 }
 
-var msg = document.createElement('div');
-msg.textContent = '🎉 You found a secret!';
-msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5rem;color:var(--accent);z-index:9999;animation:fadeUp 1s ease forwards;pointer-events:none;font-family:JetBrains Mono,monospace;';
-document.body.appendChild(msg);
-setTimeout(function() { msg.remove(); }, 1500);
+var joke = DEV_JOKES[Math.floor(Math.random() * DEV_JOKES.length)];
+
+var bubble = document.createElement('div');
+bubble.textContent = joke;
+bubble.className = 'joke-bubble';
+bubble.style.cssText = 'position:fixed;left:' + (rect.right + 15) + 'px;top:' + (rect.top + rect.height / 2) + 'px;transform:translateY(-50%);max-width:220px;padding:12px 16px;background:var(--surface);border:1px solid rgba(100,255,218,0.3);border-radius:12px;color:var(--text-primary);font-size:0.8rem;font-family:JetBrains Mono,monospace;z-index:9999;opacity:0;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+
+var tail = document.createElement('div');
+tail.style.cssText = 'position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:8px solid rgba(100,255,218,0.3);';
+bubble.appendChild(tail);
+
+document.body.appendChild(bubble);
+
+bubble.animate([
+  { opacity: 0, transform: 'translateY(-50%) translateX(-10px) scale(0.95)' },
+  { opacity: 1, transform: 'translateY(-50%) translateX(0) scale(1)' }
+], { duration: 300, easing: 'ease-out', fill: 'forwards' });
+
+setTimeout(function() {
+  bubble.animate([
+    { opacity: 1, transform: 'translateY(-50%) translateX(0) scale(1)' },
+    { opacity: 0, transform: 'translateY(-50%) translateX(10px) scale(0.95)' }
+  ], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+  setTimeout(function() { bubble.remove(); }, 200);
+}, 4000);
 }
 
 // ──── Hat Swap Particle System ────
@@ -1815,6 +1847,10 @@ function animateAvatar() {
     } else {
       hatParticles[i].draw(avatarCtx);
     }
+  }
+
+  if (matrixMode) {
+    drawGlasses();
   }
 
   if (hatParticles.length > 0) {
@@ -2105,24 +2141,7 @@ function animate() {
     ambientParticles[i].draw(ctx);
   }
 
-  // Constellation lines between nearby ambient particles
-  for (var i = 0; i < ambientParticles.length; i++) {
-    for (var j = i + 1; j < ambientParticles.length; j++) {
-      var dx = ambientParticles[i].x - ambientParticles[j].x;
-      var dy = ambientParticles[i].y - ambientParticles[j].y;
-      var distSq = dx * dx + dy * dy;
-      if (distSq < CONSTELLATION_DIST * CONSTELLATION_DIST) {
-        var dist = Math.sqrt(distSq);
-        var alpha = (1 - dist / CONSTELLATION_DIST) * 0.06;
-        ctx.beginPath();
-        ctx.moveTo(ambientParticles[i].x, ambientParticles[i].y);
-        ctx.lineTo(ambientParticles[j].x, ambientParticles[j].y);
-        ctx.strokeStyle = 'rgba(100, 255, 218, ' + alpha + ')';
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    }
-  }
+  // Constellation lines removed for V1 optimization
 
   if (trailPoints.length > 2) {
     for (var i = trailPoints.length - 1; i >= 0; i--) {
@@ -2140,21 +2159,10 @@ function animate() {
         ctx.quadraticCurveTo(trailPoints[i].x, trailPoints[i].y, xc, yc);
       }
 
-      var gradient = ctx.createLinearGradient(
-        trailPoints[0].x, trailPoints[0].y,
-        trailPoints[trailPoints.length - 1].x, trailPoints[trailPoints.length - 1].y
-      );
-      gradient.addColorStop(0, 'rgba(100, 255, 218, 0)');
-      gradient.addColorStop(0.5, 'rgba(100, 255, 218, 0.15)');
-      gradient.addColorStop(1, 'rgba(124, 92, 252, 0.2)');
-
-      ctx.strokeStyle = gradient;
+      // V1: Simplified solid color trail (no gradient allocation)
+      ctx.strokeStyle = 'rgba(100, 255, 218, 0.2)';
       ctx.lineWidth = 2;
       ctx.lineCap = 'round';
-      ctx.stroke();
-
-      ctx.strokeStyle = 'rgba(100, 255, 218, 0.04)';
-      ctx.lineWidth = 12;
       ctx.stroke();
     }
   }
