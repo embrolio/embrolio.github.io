@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="color-scheme" content="dark">
+  <title>Articles | brolio.dev</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Articles | brolio.dev">
+  <meta property="og:description" content="Thoughts on development, design, and building things.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://brolio.dev/writing/">
+  <meta property="og:site_name" content="brolio.dev">
+  <meta property="og:image" content="https://brolio.dev/writing/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Articles | brolio.dev">
+  <meta name="twitter:description" content="Thoughts on development, design, and building things.">
+  <meta name="twitter:image" content="https://brolio.dev/writing/og-image.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&family=Inter:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%2364ffda'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Background Layers -->
+  <div class="noise"></div>
+  <div class="vignette"></div>
+
+  <!-- Main Layout -->
+  <div class="writing-layout">
+    <main class="writing-main">
+      <header class="writing-section-header">
+        <h1>Articles</h1>
+        <p>Thoughts on development, design, and building things.</p>
+      </header>
+
+      <section class="writing-archive">
+        <ul class="writing-archive__list">
+
+          <li class="writing-archive__item">
+            <article>
+              <h2><a href="/writing/solo-dev-cognitive-bridge.html">Your Best Ideas and Your Best Code Never Happen at the Same Time</a></h2>
+              <div class="writing-archive__meta">
+                <time datetime="2026-04-16">Apr 16, 2026</time>
+                <span class="reading-time">6 min read</span>
+              </div>
+              <p class="writing-archive__excerpt">Using Claude as a cognitive bridge between creative brainstorming and analytical implementation for solo developers.</p>
+            </article>
+          </li>
+
+        </ul>
+      </section>
+
+      <nav class="writing-back">
+        <a href="/">← Back to brolio.dev</a>
+      </nav>
+    </main>
+
+    <aside class="writing-sidebar">
+      <nav class="writing-sidebar__nav">
+        <h3>All Articles</h3>
+        <ul class="writing-sidebar__list">
+          <li class="writing-sidebar__item">
+            <a href="/writing/solo-dev-cognitive-bridge.html">Your Best Ideas and Your Best Code Never Happen at the Same Time</a>
+            <time>Apr 16, 2026</time>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="writing.js" defer></script>
+</body>
+</html>

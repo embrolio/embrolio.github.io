@@ -475,6 +475,28 @@ html, body { cursor: auto; }
 .tech-grid { gap: 0.4rem; }
 .tech-tag { font-size: 0.65rem; padding: 0.35rem 0.7rem; }
 }
+
+.footer-links {
+  margin-top: 2rem;
+  text-align: center;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 1s;
+  pointer-events: auto;
+}
+
+.footer-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  transition: color 0.2s ease;
+  cursor: none;
+}
+
+.footer-link:hover {
+  color: var(--accent);
+}
 </style>
 
 </head>
@@ -536,6 +558,9 @@ html, body { cursor: auto; }
   <div class="status closed">
     <span class="status-dot"></span>
     <span class="status-label">currently not available for new opportunities</span>
+  </div>
+  <div class="footer-links">
+    <a href="/writing/" class="footer-link">Articles</a>
   </div>
 </div>
 

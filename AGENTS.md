@@ -144,3 +144,29 @@ This project uses Ship It Clean (SIC) for coordinated development:
 Run `/sic-recon` to update project context.
 Run `/sic-plan` to create a development plan.
 Run `/sic-cook` to execute a plan.
+
+## Revised Constraints (2026-04-16)
+
+The publishing section (`/writing/`) introduces a bounded exception to the single-file architecture:
+
+**Permitted:**
+- `/writing/` directory with standalone article pages
+- Shared stylesheet (`/writing/styles.css`) for writing section only
+- Shared runtime (`/writing/writing.js`) for UX enhancements
+- `/writing/index.html` as article listing page
+
+**Maintained:**
+- Homepage (`index.html`) remains single-file, inline everything
+- No build tools, no npm, no bundlers
+- GitHub Pages hosting
+- Zero dependencies except Google Fonts
+- Articles are static HTML with OG tags
+
+**Rationale:**
+The publishing section is functionally a separate "app" from the portfolio homepage. Articles need unique URLs for OG cards, which requires separate HTML files. The bounded exception keeps the spirit of the original constraints (simplicity, no build tools) while acknowledging the reality of multi-page publishing requirements.
+
+**Limits:**
+- Exception applies ONLY to `/writing/` directory
+- No further directory proliferation without revisiting constraints
+- Writing section must remain vanilla HTML/CSS/JS
+- No server-side logic, no CMS, no database

@@ -1,0 +1,60 @@
+workflow:
+  id: "publishing-section-2026-04-16"
+  started_at: "2026-04-16T16:45:00Z"
+  artifact_folder: ".claude/fw-artifacts/publishing-section-2026-04-16"
+  current_phase: 5
+  status: "in_progress"
+  mode: "standard"
+issue:
+  key: "manual"
+  title: "Add publishing/writing section to brolio.dev"
+  source: "manual"
+  branch: "feature/publishing-section"
+phases_completed:
+  - phase: 1
+    completed_at: "2026-04-16T16:45:00Z"
+    summary: "Brainstorm completed, approach selected: Template Duplication"
+  - phase: 2
+    completed_at: "2026-04-16T16:45:00Z"
+    summary: "Exploration from brainstorm artifact"
+  - phase: 3
+    completed_at: "2026-04-16T20:27:31Z"
+    summary: 'Questions answered: 2 (layout, CSS strategy)'
+  - phase: 4
+    completed_at: "2026-04-16T20:27:31Z"
+    summary: 'Option B selected with revisions: breakpoint fixed 901→1040px, particles removed, static sidebars, OG image strategy added'
+config_used:
+  quality_preset: "balanced"
+  parallel_explorers: 2
+  architect_mode: "single"
+  review_mode: "single"
+  max_review_retries: 5
+  confidence_threshold: 80
+  auto_advance: false
+  auto_recommend: false
+  simplify_before_review: true
+artifacts:
+  exploration: ".claude/fw-artifacts/brainstorm-publishing-section-2026-04-16.md"
+  clarifications: ".claude/fw-artifacts/publishing-section-2026-04-16/clarifications.md"
+  architecture: ".claude/fw-artifacts/publishing-section-2026-04-16/architecture.md"
+  plan: ".claude/fw-artifacts/publishing-section-2026-04-16/plan.md"
+  review_history: ".claude/fw-artifacts/publishing-section-2026-04-16/review-history.md"
+review:
+  max_attempts: 5
+  last_outcome: PASS
+  review_mode: "single"
+  attempts: 0
+  last_attempt_at: "2026-04-16T21:00:01Z"
+  passed_at: "2026-04-16T21:03:30Z"
+manual_testing:
+  required: true
+  complexity_assessment: medium
+  reason: New publishing section with responsive layout, OG tags, visual consistency requirements
+  status: passed
+  feedback: 404 on /writing was local server limitation. Full path works. All features verified.
+architecture_review:
+  verdict: RETHINK
+  reviewed_at: "2026-04-16T20:27:31Z"
+  user_override: true
+simplify:
+  skipped: true

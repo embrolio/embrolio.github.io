@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="color-scheme" content="dark">
+  <title>{Article Title} | brolio.dev</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{Article Title}">
+  <meta property="og:description" content="{Excerpt ~150 chars}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://brolio.dev/writing/{slug}.html">
+  <meta property="og:site_name" content="brolio.dev">
+  <meta property="og:image" content="https://brolio.dev/writing/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{Article Title}">
+  <meta name="twitter:description" content="{Excerpt ~150 chars}">
+  <meta name="twitter:image" content="https://brolio.dev/writing/og-image.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&family=Inter:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon (same as homepage) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%2364ffda'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+
+  <!-- Background Layers -->
+  <div class="noise"></div>
+  <div class="vignette"></div>
+
+  <!-- Main Layout -->
+  <div class="writing-layout">
+    <main class="writing-main">
+      <article data-reading-time>
+        <header class="writing-article-header">
+          <h1>{Article Title}</h1>
+          <div class="writing-meta">
+            <time datetime="2026-04-16">Apr 16, 2026</time>
+            <span class="reading-time"></span>
+          </div>
+        </header>
+
+        <div class="writing-article-content">
+          <!-- Article body goes here -->
+
+          <p>This is the article template. Replace this content with your article.</p>
+
+          <h2>Section Heading</h2>
+
+          <p>Write your article content using standard HTML elements. Paragraphs, headings, lists, blockquotes, code blocks, and images are all styled automatically.</p>
+
+          <pre><code>const example = "code blocks work too";</code></pre>
+
+          <blockquote>
+            <p>Blockquotes are styled with a left accent border and subtle background.</p>
+          </blockquote>
+
+          <p>Links look <a href="#">like this</a> — accent color, underline on hover.</p>
+        </div>
+      </article>
+
+      <nav class="writing-back">
+        <a href="/">← Back to brolio.dev</a>
+        <a href="/writing/">← All Articles</a>
+      </nav>
+    </main>
+
+    <aside class="writing-sidebar">
+      <nav class="writing-sidebar__nav">
+        <h3>All Articles</h3>
+        <ul class="writing-sidebar__list">
+          <!--
+            STATIC SIDEBAR SNIPPET
+            Copy this list from /writing/index.html when publishing.
+            Mark the current article with writing-sidebar__item--current class.
+          -->
+          <li class="writing-sidebar__item writing-sidebar__item--current">
+            <a href="/writing/template.html">{Article Title}</a>
+            <time>Apr 16, 2026</time>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="writing.js" defer></script>
+</body>
+</html>

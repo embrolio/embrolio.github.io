@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Best Ideas and Your Best Code Never Happen at the Same Time | brolio.dev</title>
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://brolio.dev/writing/solo-dev-cognitive-bridge.html">
+  
+  <!-- OG Cards -->
+  <meta property="og:title" content="Your Best Ideas and Your Best Code Never Happen at the Same Time">
+  <meta property="og:description" content="Using Claude as a cognitive bridge between creative brainstorming and analytical implementation for solo developers.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://brolio.dev/writing/solo-dev-cognitive-bridge.html">
+  <meta property="og:site_name" content="brolio.dev">
+  <meta property="og:image" content="https://brolio.dev/writing/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Your Best Ideas and Your Best Code Never Happen at the Same Time">
+  <meta name="twitter:description" content="Using Claude as a cognitive bridge between creative brainstorming and analytical implementation for solo developers.">
+  <meta name="twitter:image" content="https://brolio.dev/writing/og-image.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%2364ffda'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Fira+Code&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="reading-progress"></div>
+  
+  <div class="noise-bg"></div>
+  <div class="vignette"></div>
+  
+  <div class="writing-layout">
+    <main class="writing-main">
+      <article data-reading-time>
+        <header class="writing-article-header">
+          <h1>Your Best Ideas and Your Best Code Never Happen at the Same Time</h1>
+          <div class="writing-meta">
+            <time datetime="2026-04-16">Apr 16, 2026</time>
+            <span class="reading-time">6 min read</span>
+          </div>
+        </header>
+        
+        <div class="writing-article-content">
+          <p>One of my better ideas this year came together on my couch at 11pm. Twenty minutes of rambling into my phone — no IDE open, no tickets, no structure. The next morning I sat down, loaded the spec that came out of that session, and started building.</p>
+          
+          <p>I'm still figuring out how to make this consistent. But it's already better than what I was doing before.</p>
+          
+          <h2>The Problem Nobody Talks About</h2>
+          
+          <p>I have two modes. There's the <strong>creative me</strong> — the one who connects dots across domains, names things intuitively, sees the whole product in one flash of clarity. He shows up unpredictably. Usually not at a desk.</p>
+          
+          <p>And there's the <strong>analytical me</strong> — the one who reads error traces like poetry, architects data models, writes clean tests. He needs silence, a large monitor, and a mate he actually remembers to drink.</p>
+          
+          <p>The problem: they don't share a schedule.</p>
+          
+          <p>Most productivity advice for developers assumes a single cognitive state. Sit down, focus, ship. But if you're a solo dev — especially one building products on the side — you know that's not how it works. Your best ideas hit you on a walk, at 11pm when the analytical part of your brain finally clocks out. You scramble to write them down. You lose half of them. The ones you keep are context-free fragments that make no sense the next morning.</p>
+          
+          <p>That gap is where product ideas go to die.</p>
+          
+          <h2>What I've Been Trying: Claude as a Cognitive Bridge</h2>
+          
+          <p>I started doing something that sounds almost too simple: <strong>using Claude differently depending on which brain I'm running on.</strong></p>
+          
+          <p>When I'm in creative mode — mobile, usually walking or on the couch, voice-first — I open a Claude conversation and just <em>talk</em>. No structure. No agenda. I describe the problem, the itch I can't scratch, the weird analogy that just clicked. Claude asks questions, pushes back, helps me name things. The session is messy and nonlinear and that's the point.</p>
+          
+          <p>What comes out the other end isn't code. It's a <strong>spec artifact</strong> — a structured document Claude generates at the end of the session. Problem framing, core decisions, open questions, even a name for the thing.</p>
+          
+          <p>Then the next day, analytical me sits down with Claude Code, drops in that artifact, and says <em>build this.</em> No context reconstruction. No "wait, what was I thinking." The handoff works because the artifact carries the intent.</p>
+          
+          <h2>A Real Example: Thoth</h2>
+          
+          <p>The clearest case I have so far is <strong>Thoth</strong> — a Claude Code plugin that auto-generates Jira worklogs by combining git commit analysis with manual activity tracking. The idea came out of a frustration I'd been sitting on for months: I knew what I worked on, my commits knew what I worked on, but Jira had no idea.</p>
+          
+          <p>The brainstorm session was typical — scattered, half-formed, lots of "something like this but not exactly." I described the pain. Claude started pulling threads: what triggers the log? what's the input — commits, time, both? does estimation need to be part of this? We went back and forth until the shape of the thing was clear.</p>
+          
+          <p>At the end I asked: <em>"Give me a structured product brief from this conversation."</em></p>
+          
+          <p>What came back:</p>
+          
+          <pre><code>Product: Thoth
+Problem: Worklog entry is manual friction that kills flow — devs skip it
+Core user: Developer working across multiple Jira tickets per day
+Trigger: End of coding session or commit push
+Input sources: Git commit history + optional manual activity notes
+Core mechanic: Claude analyzes commits, infers effort, drafts worklog entries
+Calibration loop: User corrects estimates → model learns personal patterns
+Key command: /thoth:learn — profiles commit style for better inference
+Open questions: Granularity of time tracking, multi-repo support</code></pre>
+          
+          <p>The next morning, Claude Code got that brief as its first message. It proposed a slice breakdown and we started with slice one. Thoth is now built and in use. The brief-to-build handoff was cleaner than anything I'd managed with traditional notes.</p>
+          
+          <h2>Why This Works</h2>
+          
+          <p>Your brain has two networks in competition: the <strong>Default Mode Network</strong> — active during mind-wandering, association, creativity — and the <strong>Task Positive Network</strong> — active during focused, sequential work. They don't run well at the same time.</p>
+          
+          <p>Most dev workflows try to force both into the same session. Brainstorm <em>and</em> implement. It's expensive and usually one mode loses. The two-phase approach stops fighting that — and Claude is the <strong>stateless intermediary</strong> that doesn't care which version of you it's talking to, as long as the artifact is good.</p>
+          
+          <h2>When It Breaks</h2>
+          
+          <p>This workflow has a real failure mode — I've hit it more than once. If the creative session is too scattered, the brief comes out shallow. Vague problem statements, fuzzy scope, open questions that aren't actually questions — just anxiety in disguise. Claude will structure whatever you give it. Garbage in, structured garbage out.</p>
+          
+          <p>The signal I've learned to watch for: if at the end of the session I can't answer <em>"who specifically hits this problem and when,"</em> I'm not ready to generate the brief yet. Keep talking.</p>
+          
+          <h2>The Artifact Is the Secret</h2>
+          
+          <p>The real insight isn't "use AI for brainstorming." It's that <strong>the artifact format matters enormously.</strong></p>
+          
+          <p>A raw transcript is useless. A vague summary is almost useless. What you need is a structured spec with enough fidelity that your future analytical self — or Claude Code — can pick it up cold and run.</p>
+          
+          <p>The format I've landed on: problem framing, core user, trigger/job-to-be-done, MVP scope, first decisions made, and open questions. That last one is critical — it's what prevents you from losing the uncertainty that still needs resolution. The temptation is to clean it up, resolve the ambiguity in the brief itself. Don't. Leave the open questions open. That's what the next session is for.</p>
+          
+          <p>Getting Claude to generate this at the end of the creative session is a one-liner: <em>"Structure what we just built into a product brief I can hand to a developer tomorrow."</em> It knows what you mean.</p>
+          
+          <h2>Where I'm Taking This Next</h2>
+          
+          <p>The workflow is good enough to use. The artifact format is stabilizing. What I don't have yet is a formalized structure — a schema that's consistent across projects, and ideally a Claude Code plugin that ingests a brief and bootstraps the project automatically.</p>
+          
+          <p>That's the next thing I'm building. If you're trying something similar — or if your version of this looks completely different — I'd genuinely like to compare notes.</p>
+          
+          <p class="article-signature">— Mariano, building at <a href="https://brolio.dev">brolio.dev</a></p>
+        </div>
+      </article>
+      
+      <nav class="writing-back">
+        <a href="/">← Back to brolio.dev</a>
+        <a href="/writing/">← All Articles</a>
+      </nav>
+    </main>
+    
+    <aside class="writing-sidebar">
+      <nav class="writing-sidebar__nav">
+        <h3>All Articles</h3>
+        <ul class="writing-sidebar__list">
+          <li class="writing-sidebar__item writing-sidebar__item--current">
+            <a href="/writing/solo-dev-cognitive-bridge.html">Your Best Ideas and Your Best Code Never Happen at the Same Time</a>
+            <time>Apr 16, 2026</time>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
+  
+  <script src="writing.js" defer></script>
+</body>
+</html>
