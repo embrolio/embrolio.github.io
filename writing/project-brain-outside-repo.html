@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="color-scheme" content="dark">
+  <title>Stop Keeping Your Project Brain Inside Your Project | brolio.dev</title>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://brolio.dev/writing/project-brain-outside-repo.html">
+
+  <!-- Open Graph -->
+  <!-- Custom OG image SVG exists at project-brain-outside-repo-og-image.svg; export to PNG for social sharing when ready -->
+  <meta property="og:title" content="Stop Keeping Your Project Brain Inside Your Project">
+  <meta property="og:description" content="Your project's brain shouldn't live inside your project. Why I moved my orchestration state from repo folders to a ticket board — and what changed.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://brolio.dev/writing/project-brain-outside-repo.html">
+  <meta property="og:site_name" content="brolio.dev">
+  <meta property="og:image" content="https://brolio.dev/writing/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stop Keeping Your Project Brain Inside Your Project">
+  <meta name="twitter:description" content="Your project's brain shouldn't live inside your project. Why I moved my orchestration state from repo folders to a ticket board — and what changed.">
+  <meta name="twitter:image" content="https://brolio.dev/writing/og-image.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&family=Inter:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon (same as homepage) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%2364ffda'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+
+  <!-- Background Layers -->
+  <div class="noise"></div>
+  <div class="vignette"></div>
+
+  <!-- Main Layout -->
+  <div class="writing-layout">
+    <main class="writing-main">
+      <article data-reading-time>
+        <header class="writing-article-header">
+          <h1>Stop Keeping Your Project Brain Inside Your Project</h1>
+          <div class="writing-meta">
+            <time datetime="2026-04-23">Apr 23, 2026</time>
+            <span class="reading-time"></span>
+          </div>
+        </header>
+
+        <div class="writing-article-content">
+
+          <p>In the <a href="/writing/solo-dev-cognitive-bridge.html">last post</a> I talked about separating creative thinking from analytical building — using AI as a bridge between the two. A brainstorm becomes a structured brief, the brief becomes buildable work. That part clicked fast.</p>
+
+          <p>What took me longer to figure out was <em>where that work should live.</em></p>
+
+          <p>Longer than I'd like to admit, honestly.</p>
+
+          <h2>The Folder Trap</h2>
+
+          <p>If you've used AI coding tools for more than a week, you've probably built some version of this: a folder inside your project — maybe <code>.claude/</code>, maybe <code>docs/ai/</code>, maybe <code>planning/</code> — stuffed with constitution files, phase definitions, workflow state, decision logs, and whatever else your AI agent needs to stay on track.</p>
+
+          <p>I did exactly this. It felt natural. The project is in the repo, the orchestration lives next to the project. Everything in one place.</p>
+
+          <p>It felt right.</p>
+
+          <p>It works right up until it doesn't.</p>
+
+          <p>Here's what happened to me. I had three things in flight — a plugin, a feature for a client project, and a side product I was scoping. Each had its own set of planning artifacts. Each was at a different stage. I'd open a folder, read through the state files, try to remember where I'd left off, reconstruct context from a mix of markdown docs and half-finished notes. Then I'd do the same for the next one.</p>
+
+          <p>I was spending cognitive budget on <em>figuring out where things stood</em> instead of moving them forward. The orchestration layer — the thing that was supposed to help me build faster — had become overhead.</p>
+
+          <p>Overhead, not progress.</p>
+
+          <h2>The Question I Couldn't Answer</h2>
+
+          <p>The frustration crystallized one afternoon when I realized I couldn't answer a simple question: <strong>what are the three most important things I should work on this week?</strong></p>
+
+          <p>Not because I didn't know. Because the answer was scattered across repo folders. There was no single surface where I could see everything, compare priorities, and decide what to tackle next.</p>
+
+          <p>I'd been a developer for 20 years. I'd spent most of those years working with ticket boards — Jira, Azure DevOps, whatever the shop used. And for 20 years, that board was how I <em>thought</em> about work. Not as files in a directory. As cards on a surface I could scan, sort, drag, and reprioritize in seconds.</p>
+
+          <p>Which is embarrassing, honestly.</p>
+
+          <p>I'd accidentally abandoned the tool that matched how my brain actually organizes work — and replaced it with something worse, just because it was closer to the code.</p>
+
+          <p>Closer to the code isn't always closer to the answer.</p>
+
+          <h2>Externalizing the Source of Truth</h2>
+
+          <p>So I moved everything out. Brainstorm artifacts, briefs, implementation plans — the project state stopped living in the repo and started living in a ticket system.</p>
+
+          <p>The mechanics were straightforward. I built a plugin pipeline with three commands:</p>
+
+          <p><strong>Brainstorm</strong> — An exploration phase. No tickets, no commitments. The AI researches the codebase, identifies approaches, surfaces questions. The output is a structured brief saved locally. This is throwaway — it's a thinking artifact, not a source of truth.</p>
+
+          <p><strong>Brief-to-Ticket</strong> — Takes that brief and creates real tickets. Analyzes it for gaps, asks clarifying questions, assesses scope, and creates stories (or an epic with child stories if the work breaks down into multiple pieces). Now the work exists <em>outside the repo</em>, on a board, with status and priority.</p>
+
+          <p><strong>Start</strong> — Takes a ticket key, fetches the full context from the ticket system, transitions it to "In Progress," and runs the implementation workflow. When done, it pushes a PR and moves the ticket to the next status. The ticket is the record. The repo is just where the code happens.</p>
+
+          <p>The local artifacts my plugin creates during implementation — exploration notes, architecture proposals, review scores — those still exist in the repo. But they're <em>ephemeral</em>. Working memory, not long-term state. The moment the PR is up, the ticket tells the real story.</p>
+
+          <p>Here's what that actually looks like. This is a real ticket generated from a brief:</p>
+
+          <pre><code>BRO-47: Implement worklog auto-generation from commit analysis
+
+Status: To Do | Priority: Medium | Assignee: mariano
+
+Description:
+Auto-generate Jira worklog entries by analyzing git commit 
+history for the current ticket. Should infer time spent from 
+commit spacing and map commit messages to work descriptions.
+
+Acceptance Criteria:
+- Given a ticket key, analyze all commits referencing that ticket
+- Generate draft worklog with time estimates
+- Allow manual correction before submission
+- Track correction patterns for future calibration
+
+Scope: Single-repo, single-ticket (multi-repo is BRO-48)
+Epic: Thoth Plugin Suite</code></pre>
+
+          <p>That's a ticket. Not a markdown file. Not a phase definition. A thing I can sort, prioritize, hand off to someone else — or to another AI agent — without explaining where the planning docs live.</p>
+
+          <h2>Why the Board Changes Everything</h2>
+
+          <p>The shift sounds like a tooling detail. It's not. It changed how I <em>think</em> about my work across projects.</p>
+
+          <p>With folders, I had depth but no width. I could dive into one project's state, but comparing across projects meant opening three repos and mentally assembling a picture. With a board, I open one surface and see everything: what's blocked, what's ready, what I've been ignoring.</p>
+
+          <p>Prioritization became a drag operation instead of a mental exercise. I could look at my week and decide — this ticket first, that one can wait, this other one is a good candidate to hand to an AI agent while I focus on the hard one. Parallel work across agents and my own hands became manageable because the coordination layer was <em>visible</em>.</p>
+
+          <p>I know that sounds minor. It isn't.</p>
+
+          <p>And there's a subtler benefit: <strong>tickets are a natural handoff surface.</strong> When a brief becomes a ticket, it carries structured context — problem statement, acceptance criteria, scope decisions. Any agent (or human teammate) can pick it up cold. You don't need to explain the folder structure or which markdown file has the latest state (versus "read the README in <code>.claude/phases/phase-2.md</code> and also check the decisions log"). The ticket <em>is</em> the context.</p>
+
+          <h2>The Circular Dependency I Didn't See</h2>
+
+          <p>Here's the thing I wish I'd seen earlier: keeping your orchestration state inside the repo creates a circular dependency. The AI agent needs context to work on the project, and that context lives <em>inside</em> the project it's working on. Every branch, every stash, every reset risks corrupting your workflow state along with your code.</p>
+
+          <p>This happened to me. Once. I rebased a branch and lost a week of planning artifacts that hadn't been committed to main yet. The code was fine — I'd pushed it. The brain was gone.</p>
+
+          <p>Externalizing to a ticket system breaks that coupling. The project state lives on a server you're not rebasing. The code stays clean — no planning artifacts in your tree, no merge conflicts on workflow files, no <code>.gitignore</code> entries for your AI's scratchpad.</p>
+
+          <p>It's the same principle behind not putting your CI config logic inside the application it builds. Separation of concerns, applied to how you manage work itself. Except this time I actually followed my own advice.</p>
+
+          <h2>When It Breaks</h2>
+
+          <p>This isn't a perfect system. I want to be clear about that before it sounds like a product pitch.</p>
+
+          <p><strong>Ticket sprawl is real.</strong> It's easy to generate tickets faster than you can act on them. I've had weeks where my board had forty items and I'd mentally tune out the whole thing. If every brief becomes five tickets, you've just moved the noise from folders to cards. The board only works if you curate it.</p>
+
+          <p><strong>Context loss happens.</strong> Tickets are great for "what" and "when." They're worse at "why." A good exploration document captures the reasoning, the rejected alternatives, the gut feeling that led to a decision. Tickets compress that into acceptance criteria. Sometimes you need the full picture.</p>
+
+          <p><strong>You're coupling to a tool.</strong> If Jira goes down — or if I decide to switch to Linear — my project brain moves with it. That's a trade-off I'm accepting knowingly, but it's a real one.</p>
+
+          <p>I still keep working notes in the repo during implementation. The ticket is the record, but the exploration happens where the code is. The pattern isn't pure. It's practical.</p>
+
+          <p>The signal I watch for: if I'm spending more time managing tickets than doing the work they describe, I've over-indexed on the board. That's my cue to consolidate, not create more.</p>
+
+          <h2>You Don't Need Jira</h2>
+
+          <p>I use Jira because my day job runs on it and I wanted one board for everything. But this pattern works with anything that gives you a board, an API, and structured fields. GitHub Projects, Linear, YouTrack, even a well-structured Notion database.</p>
+
+          <p>The bar is low: the tool needs to hold your tickets with enough structure that an AI agent can read and write to them programmatically, and it needs to give <em>you</em> a visual surface to scan, sort, and prioritize. If it has both, it works.</p>
+
+          <p>The point isn't the tool. It's that your project's brain shouldn't live inside your project.</p>
+
+          <h2>Where This Lands</h2>
+
+          <p>The two-phase approach from the last post — creative brainstorm → structured brief → build — still holds. That's the cognitive pattern. What changed is the <em>infrastructure</em> underneath it.</p>
+
+          <p>The brief used to be the end product of the creative phase and the starting input for the build phase. Now it's an intermediate artifact. The brief gets analyzed, turned into tickets, and the tickets become the durable state. The brief can be thrown away once the tickets exist.</p>
+
+          <p>The pipeline is: <strong>think → capture → externalize → build.</strong> The first two steps happen in your head and in a conversation with AI. The third step moves it to a system designed for tracking work. The fourth step pulls from that system and executes.</p>
+
+          <p>I'm still iterating on the plugin that automates this. But the pattern itself is already how I work every day. If you've been running your orchestration from inside your repo — or if you've solved this a completely different way — I'd like to hear about it. The pattern works. But I'm still calibrating.</p>
+
+          <p class="article-signature">— Mariano, building at <a href="https://brolio.dev">brolio.dev</a></p>
+        </div>
+      </article>
+
+      <nav class="writing-back">
+        <a href="/">← Back to brolio.dev</a>
+        <a href="/writing/">← All Articles</a>
+      </nav>
+    </main>
+
+    <aside class="writing-sidebar">
+      <nav class="writing-sidebar__nav">
+        <h3>All Articles</h3>
+        <ul class="writing-sidebar__list">
+          <li class="writing-sidebar__item writing-sidebar__item--current">
+            <a href="/writing/project-brain-outside-repo.html">Stop Keeping Your Project Brain Inside Your Project</a>
+            <time>Apr 23, 2026</time>
+          </li>
+          <li class="writing-sidebar__item">
+            <a href="/writing/solo-dev-cognitive-bridge.html">Your Best Ideas and Your Best Code Never Happen at the Same Time</a>
+            <time>Apr 16, 2026</time>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="writing.js" defer></script>
+</body>
+</html>
