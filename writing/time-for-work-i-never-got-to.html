@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="color-scheme" content="dark">
+  <title>I Finally Have Time for the Work I Never Got To | brolio.dev</title>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://brolio.dev/writing/time-for-work-i-never-got-to.html">
+
+  <!-- Open Graph -->
+  <!-- Custom OG image SVG exists at time-for-work-i-never-got-to-og-image.svg; export to PNG for social sharing when ready -->
+  <meta property="og:title" content="I Finally Have Time for the Work I Never Got To">
+  <meta property="og:description" content="AI didn't replace my job. It made the repetitive half fast enough that the other half finally fits in the day.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://brolio.dev/writing/time-for-work-i-never-got-to.html">
+  <meta property="og:site_name" content="brolio.dev">
+  <meta property="og:image" content="https://brolio.dev/writing/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="I Finally Have Time for the Work I Never Got To">
+  <meta name="twitter:description" content="AI didn't replace my job. It made the repetitive half fast enough that the other half finally fits in the day.">
+  <meta name="twitter:image" content="https://brolio.dev/writing/og-image.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&family=Inter:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Favicon (same as homepage) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%2364ffda'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress"></div>
+
+  <!-- Background Layers -->
+  <div class="noise"></div>
+  <div class="vignette"></div>
+
+  <!-- Main Layout -->
+  <div class="writing-layout">
+    <main class="writing-main">
+      <article data-reading-time>
+        <header class="writing-article-header">
+          <h1>I Finally Have Time for the Work I Never Got To</h1>
+          <div class="writing-meta">
+            <time datetime="2026-04-30">Apr 30, 2026</time>
+            <span class="reading-time"></span>
+          </div>
+        </header>
+
+        <div class="writing-article-content">
+
+          <p>Last Tuesday I spent three hours designing a label taxonomy for routing production errors into the right Jira buckets automatically. The week before that, I built a plugin that generates worklogs from git commits so I never have to fill timesheets again. This morning I'm writing this article.</p>
+
+          <p>A year ago, those three hours would've been spent chasing a config bug across four tenant databases. The week before that would've been manually copying error details from Sentry into Jira tickets. And writing? Not a chance.</p>
+
+          <p>Something shifted. Not in what I'm capable of — in what I'm asked to do with my day.</p>
+
+          <h2>The Treadmill</h2>
+
+          <p>I maintain a multi-tenant platform that serves about a hundred small businesses. Each has its own database, its own edge cases, its own way of breaking things on a Tuesday afternoon. For years, a significant chunk of my week looked like this:</p>
+
+          <p>Tenant reports a bug. Open Sentry, find the trace, cross-reference with the tenant's database, figure out which config value drifted, fix it, test across affected environments, push, confirm with the tenant. Repeat. Some days that was the whole day.</p>
+
+          <p>The work wasn't hard. That's the point. It required my context — I knew the system, the tenants, the patterns — but it was the same problem over and over. Necessary work. Real work. But repetitive enough that it filled the day by itself, and the other kind of work — architecture, tooling, product thinking — got squeezed into margins. Late nights. Weekends. The couch at 11pm.</p>
+
+          <p>I kept telling myself I'd get to that stuff once things calmed down.</p>
+
+          <p>Things never calmed down.</p>
+
+          <h2>What Changed</h2>
+
+          <p>AI coding tools didn't replace my job. They made the repetitive half fast enough that the other half finally fits in the day.</p>
+
+          <p>The shift happened gradually. First it was small — generating boilerplate, writing tests I'd been putting off, drafting PRs for straightforward changes. Fine. Useful. But not transformative.</p>
+
+          <p>The real change came when I started trusting the tools with the context-heavy but cognitively simple work. The kind where 80% of the effort is understanding the situation and 20% is the fix. AI is surprisingly good at that ratio — give it the right context and the execution is reliable. I don't hand-hold config changes across tenant databases anymore. I describe the pattern, point at the right files, review what comes back.</p>
+
+          <p>That freed up something I hadn't had in years: uninterrupted blocks of time for hard problems.</p>
+
+          <h2>The Work That Was Always on the Backlog</h2>
+
+          <p>Here's what my weeks look like now. I'm building an orchestration system for how AI agents work on my codebase — not just prompting, but structured workflows with recon phases, planning phases, review gates. I'm designing error routing pipelines that turn raw Sentry noise into contextualized, actionable tickets without me in the loop. I'm writing about what I'm learning.</p>
+
+          <p>This isn't a productivity hack. It's a shift in what my day looks like. The bugs still get fixed — faster, actually, because the tooling around them is better. But now there's room in the week for the work that used to get postponed indefinitely.</p>
+
+          <p>And the irony is that a lot of that work is building the tooling that handles the repetitive stuff. The loop feeds itself.</p>
+
+          <h2>The Honest Part</h2>
+
+          <p>I want to be careful here because this narrative has a seductive version that isn't true. The seductive version: "AI does the grunt work, I do the thinking, everything is better." Clean and flattering.</p>
+
+          <p>The real version is messier. Some of that "boring" work was how I stayed close to the system. Chasing bugs across tenant databases taught me patterns I wouldn't have seen otherwise. There's a real risk of abstraction — of building a layer between yourself and the details, then losing the intuition that made you effective in the first place.</p>
+
+          <p>I don't have a clean answer for this yet. What I do is review everything that comes back, and I make sure I still read raw error traces regularly even when I don't have to. It's a discipline, not a default. The tool wants to abstract. You have to choose not to let it abstract you.</p>
+
+          <h2>The Meta Layer</h2>
+
+          <p>This post was written the way I described in the <a href="/writing/solo-dev-cognitive-bridge.html">first article</a> — a brainstorm conversation that turned into a structured brief, then a focused writing session. Except this time, the writing session itself was collaborative. I described the thesis, laid out the beats I wanted to hit, and Claude helped me draft it. I edited, pushed back, restructured, rewrote the parts that sounded too clean.</p>
+
+          <p>Same pattern. Creative intent is mine. Execution is shared. And the thing that makes it work is the same thing that makes the code work: I know what good looks like, so I can steer. The tool is fast. Taste is the bottleneck. Not typing speed.</p>
+
+          <p>A year ago I wouldn't have had time to write this. Not because writing is hard, but because the calendar was full of work that didn't need a blog post — it needed a patch and a deploy. Now the patch gets handled and I get to think about things worth sharing.</p>
+
+          <p>That's the real shift. Not doing more. Doing better.</p>
+
+          <p class="article-signature">— Mariano, building at <a href="https://brolio.dev">brolio.dev</a></p>
+        </div>
+      </article>
+
+      <nav class="writing-back">
+        <a href="/">← Back to brolio.dev</a>
+        <a href="/writing/">← All Articles</a>
+      </nav>
+    </main>
+
+    <aside class="writing-sidebar">
+      <nav class="writing-sidebar__nav">
+        <h3>All Articles</h3>
+        <ul class="writing-sidebar__list">
+          <li class="writing-sidebar__item writing-sidebar__item--current">
+            <a href="/writing/time-for-work-i-never-got-to.html">I Finally Have Time for the Work I Never Got To</a>
+            <time>Apr 30, 2026</time>
+          </li>
+          <li class="writing-sidebar__item">
+            <a href="/writing/project-brain-outside-repo.html">Stop Keeping Your Project Brain Inside Your Project</a>
+            <time>Apr 23, 2026</time>
+          </li>
+          <li class="writing-sidebar__item">
+            <a href="/writing/solo-dev-cognitive-bridge.html">Your Best Ideas and Your Best Code Never Happen at the Same Time</a>
+            <time>Apr 16, 2026</time>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="writing.js" defer></script>
+</body>
+</html>
