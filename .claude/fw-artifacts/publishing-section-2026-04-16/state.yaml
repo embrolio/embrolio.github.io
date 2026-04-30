@@ -2,8 +2,8 @@ workflow:
   id: "publishing-section-2026-04-16"
   started_at: "2026-04-16T16:45:00Z"
   artifact_folder: ".claude/fw-artifacts/publishing-section-2026-04-16"
-  current_phase: 5
-  status: "in_progress"
+  current_phase: 8
+  status: "complete"
   mode: "standard"
 issue:
   key: "manual"
@@ -23,6 +23,12 @@ phases_completed:
   - phase: 4
     completed_at: "2026-04-16T20:27:31Z"
     summary: 'Option B selected with revisions: breakpoint fixed 901→1040px, particles removed, static sidebars, OG image strategy added'
+  - phase: 7
+    completed_at: "2026-04-16T22:28:24Z"
+    summary: Commit and push to main (GitHub Pages deployment)
+  - phase: 8
+    completed_at: "2026-04-16T22:28:24Z"
+    summary: Workflow complete - publishing section live
 config_used:
   quality_preset: "balanced"
   parallel_explorers: 2
