@@ -38,7 +38,6 @@ background: var(--bg);
 color: var(--text-primary);
 font-family: 'Outfit', sans-serif;
 -webkit-font-smoothing: antialiased;
-cursor: none;
 }
 
 /* Matrix Mode */
@@ -46,13 +45,6 @@ body.matrix-mode {
 --accent: #00ff41;
 --glow: rgba(0, 255, 65, 0.08);
 }
-body.matrix-mode .custom-cursor {
-border-color: #00ff41;
-}
-body.matrix-mode .cursor-dot {
-background: #00ff41;
-}
-
 /* Spotlight Glow Effect */
 .spotlight-glow {
 --spotlight-x: 50%;
@@ -95,36 +87,6 @@ z-index: 1;
 pointer-events: none;
 }
 
-.custom-cursor {
-position: fixed;
-width: 18px;
-height: 18px;
-border: 1.5px solid var(--accent);
-border-radius: 50%;
-pointer-events: none;
-z-index: 9999;
-transform: translate(-50%, -50%);
-transition: width 0.2s, height 0.2s, border-color 0.2s, background 0.2s;
-mix-blend-mode: difference;
-}
-
-.custom-cursor.clicking {
-width: 12px;
-height: 12px;
-background: var(--accent);
-}
-
-.cursor-dot {
-position: fixed;
-width: 4px;
-height: 4px;
-background: var(--accent);
-border-radius: 50%;
-pointer-events: none;
-z-index: 9999;
-transform: translate(-50%, -50%);
-}
-
 .content {
 position: relative;
 z-index: 2;
@@ -146,7 +108,7 @@ pointer-events: none;
   animation: avatarBounce 3s ease-in-out infinite, fadeUp 0.8s ease forwards 0s;
   opacity: 0;
   pointer-events: auto;
-  cursor: none;
+  cursor: pointer;
 }
 
 @keyframes avatarBounce {
@@ -227,7 +189,7 @@ border-radius: 100px;
 color: var(--text-dim);
 background: rgba(100, 255, 218, 0.03);
 transition: all 0.3s ease;
-cursor: none;
+cursor: pointer;
 user-select: none;
 letter-spacing: 0.05em;
 }
@@ -432,7 +394,6 @@ opacity: 0;
 animation: fadeUp 0.8s ease forwards 0.95s;
 transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 pointer-events: auto;
-cursor: none;
 }
 
 .credential-card:hover {
@@ -532,13 +493,6 @@ animation: fadeUp 0.8s ease forwards 0.1s;
 pointer-events: auto;
 }
 
-/* Mobile: hide custom cursor, show default */
-@media (hover: none) and (pointer: coarse) {
-html, body { cursor: auto; }
-.custom-cursor, .cursor-dot { display: none; }
-.tech-tag, .credential-card, .links a { cursor: pointer; }
-}
-
 @media (max-width: 600px) {
 #avatar-canvas {
   width: 80px;
@@ -572,7 +526,6 @@ html, body { cursor: auto; }
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   transition: color 0.2s ease;
-  cursor: none;
 }
 
 .footer-link:hover {
@@ -586,9 +539,6 @@ html, body { cursor: auto; }
 <div class="noise"></div>
 <canvas id="trails"></canvas>
 <div class="vignette"></div>
-
-<div class="custom-cursor" id="cursor"></div>
-<div class="cursor-dot" id="cursorDot"></div>
 
 <div class="content">
   <canvas id="avatar-canvas" width="128" height="160"></canvas>
@@ -677,16 +627,12 @@ window.addEventListener('resize', resize);
 
 // ──── State ────
 var mouseX = W / 2, mouseY = H / 2;
-var isTouch = false;
 var particles = [];
 var burstParticles = [];
 var trailPoints = [];
 var MAX_TRAIL = 50;
-
-// ──── Custom Cursor ────
-var cursor = document.getElementById('cursor');
-var cursorDot = document.getElementById('cursorDot');
-var cursorX = W / 2, cursorY = H / 2;
+var hasPointer = false;
+var pointerVX = 0, pointerVY = 0;
 
 // ──── Trail Point Class ────
 function TrailPoint(x, y) {
@@ -799,6 +745,11 @@ Ring.prototype.draw = function(ctx) {
 
 // ──── Events ────
 function onMove(x, y) {
+  if (hasPointer) {
+    pointerVX = Math.max(-40, Math.min(40, x - mouseX));
+    pointerVY = Math.max(-40, Math.min(40, y - mouseY));
+  }
+  hasPointer = true;
   mouseX = x;
   mouseY = y;
   trailPoints.push(new TrailPoint(x, y));
@@ -814,7 +765,6 @@ document.addEventListener('mousemove', function(e) {
 });
 
 document.addEventListener('touchmove', function(e) {
-  isTouch = true;
   var t = e.touches[0];
   onMove(t.clientX, t.clientY);
 }, { passive: true });
@@ -828,13 +778,10 @@ function doBurst(x, y) {
 }
 
 document.addEventListener('mousedown', function(e) {
-  cursor.classList.add('clicking');
   doBurst(e.clientX, e.clientY);
 });
-document.addEventListener('mouseup', function() { cursor.classList.remove('clicking'); });
 
 document.addEventListener('touchstart', function(e) {
-isTouch = true;
 var t = e.touches[0];
 doBurst(t.clientX, t.clientY);
 }, { passive: true });
@@ -906,13 +853,27 @@ AmbientParticle.prototype.reset = function() {
   this.size = 0.5 + Math.random() * 1.5;
   this.speedX = (Math.random() - 0.5) * 0.3;
   this.speedY = (Math.random() - 0.5) * 0.3;
+  this.wakeX = 0;
+  this.wakeY = 0;
   this.opacity = Math.random() * 0.15;
   this.pulse = Math.random() * Math.PI * 2;
   this.pulseSpeed = 0.01 + Math.random() * 0.02;
 };
 AmbientParticle.prototype.update = function() {
-  this.x += this.speedX;
-  this.y += this.speedY;
+  if (hasPointer) {
+    var dx = this.x - mouseX;
+    var dy = this.y - mouseY;
+    var distanceSquared = dx * dx + dy * dy;
+    if (distanceSquared < 19600) {
+      var influence = (1 - distanceSquared / 19600) * 0.025;
+      this.wakeX += pointerVX * influence;
+      this.wakeY += pointerVY * influence;
+    }
+  }
+  this.x += this.speedX + this.wakeX;
+  this.y += this.speedY + this.wakeY;
+  this.wakeX *= 0.9;
+  this.wakeY *= 0.9;
   this.pulse += this.pulseSpeed;
   if (this.x < -10 || this.x > W + 10 || this.y < -10 || this.y > H + 10) {
     this.reset();
@@ -2289,14 +2250,8 @@ function animate() {
     }
   }
 
-  if (!isTouch) {
-    cursorX += (mouseX - cursorX) * 0.15;
-    cursorY += (mouseY - cursorY) * 0.15;
-    cursor.style.left = cursorX + 'px';
-    cursor.style.top = cursorY + 'px';
-    cursorDot.style.left = mouseX + 'px';
-    cursorDot.style.top = mouseY + 'px';
-  }
+  pointerVX *= 0.82;
+  pointerVY *= 0.82;
 
   requestAnimationFrame(animate);
 }

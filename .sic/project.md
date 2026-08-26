@@ -22,7 +22,6 @@ CNAME               ← Custom domain config (brolio.dev)
 | 1 | `#trails` | 1 | Canvas particle effects |
 | 2 | `.content` | 2 | Main UI (flexbox centered) |
 | 3 | `.vignette` | 3 | Edge darkening overlay |
-| 9999 | Custom cursor | 9999 | Mouse follower |
 
 ### Component Hierarchy
 ```
@@ -30,7 +29,6 @@ body
 ├── .noise (texture overlay)
 ├── #trails (particle canvas)
 ├── .vignette (edge vignette)
-├── #cursor / #cursorDot (custom cursor)
 └── .content
     ├── #avatar-canvas (pixel art avatar)
     ├── #categoryLabel (typewriter text)
